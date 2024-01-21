@@ -133,7 +133,7 @@ function Header() {
                   </li>
                   <li className="nav-item">
                     <button
-                      className="btn btn-success btn-outlined rounded-pill text-white mx-2"
+                      className="btn btn-primary btn-outlined rounded-pill text-white mx-2"
                       style={{ border: "none", height: "40px", width: "100px" }}
                       onClick={handleLogout}
                     >

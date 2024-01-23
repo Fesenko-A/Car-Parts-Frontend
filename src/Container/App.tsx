@@ -1,6 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Header } from "../Layout";
-import { Login, Register, NotFound, AccessDenied, Home } from "../Pages";
+import { Header } from "../Components/Layout";
+import {
+  Login,
+  Register,
+  NotFound,
+  AccessDenied,
+  Home,
+  ProductList,
+  ProductDetails,
+} from "../Pages";
 import { Routes, Route } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { User } from "../Interfaces";
@@ -34,6 +42,11 @@ function App() {
           <Route path="/register" element={<Register />}></Route>
           <Route path="/login" element={<Login />}></Route>
           <Route path="/accessDenied" element={<AccessDenied />} />
+          <Route path="/product/productList" element={<ProductList />} />
+          <Route
+            path="/productDetails/:productId"
+            element={<ProductDetails />}
+          ></Route>
           <Route path="*" element={<NotFound />}></Route>
         </Routes>
       </div>

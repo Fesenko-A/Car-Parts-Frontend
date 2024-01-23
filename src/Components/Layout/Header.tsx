@@ -1,10 +1,10 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { NavLink, useNavigate } from "react-router-dom";
-import { User } from "../Interfaces";
-import { RootState } from "../Storage/store";
-import { emptyUserState, setLoggedInUser } from "../Storage/userAuthSlice";
-import { Roles } from "../Static/Roles";
+import { User } from "../../Interfaces";
+import { RootState } from "../../Storage/store";
+import { emptyUserState, setLoggedInUser } from "../../Storage/userAuthSlice";
+import { Roles } from "../../Static/Roles";
 
 function Header() {
   const navigate = useNavigate();
@@ -71,7 +71,7 @@ function Header() {
                   <li
                     style={{ cursor: "pointer" }}
                     className="dropdown-item"
-                    onClick={() => navigate("/menuItem/menuItemList")}
+                    onClick={() => navigate("/product/productList")}
                   >
                     Products
                   </li>

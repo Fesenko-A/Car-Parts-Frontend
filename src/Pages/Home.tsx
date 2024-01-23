@@ -1,11 +1,11 @@
 import React from "react";
-import ProductList from "./Product/ProductList";
+import { ProductListHome } from "../Components/Page/Home";
 
 function Home() {
   return (
     <div>
       <div className="container p-2">
-        <ProductList />
+        <ProductListHome />
       </div>
     </div>
   );

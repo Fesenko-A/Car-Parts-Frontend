@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { NavLink, useNavigate } from "react-router-dom";
-import { User } from "../../Interfaces";
+import { CartItem, User } from "../../Interfaces";
 import { RootState } from "../../Storage/store";
 import { emptyUserState, setLoggedInUser } from "../../Storage/userAuthSlice";
 import { Roles } from "../../Static/Roles";
@@ -10,9 +10,9 @@ function Header() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  // const shoppingCartFromStore: CartItem[] = useSelector(
-  //   (state: RootState) => state.shoppingCartStore.cartItems ?? []
-  // );
+  const shoppingCartFromStore: CartItem[] = useSelector(
+    (state: RootState) => state.shoppingCartStore.cartItems ?? []
+  );
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -110,10 +110,10 @@ function Header() {
                 to="/shoppingCart"
               >
                 <i className="bi bi-cart"></i>
-                {/* {userData.id &&
+                {userData.id &&
                   (shoppingCartFromStore.length > 0
                     ? ` (${shoppingCartFromStore.length})`
-                    : "")} */}
+                    : "")}
               </NavLink>
             </li>
             <div className="d-flex" style={{ marginLeft: "auto" }}>

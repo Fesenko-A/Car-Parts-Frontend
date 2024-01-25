@@ -5,6 +5,7 @@ import NotFound from "./NotFound";
 import Register from "./Register";
 import ProductList from "./Product/ProductList";
 import ProductDetails from "./ProductDetails";
+import ShoppingCart from "./ShoppingCart";
 
 export {
   Login,
@@ -14,4 +15,5 @@ export {
   Register,
   ProductList,
   ProductDetails,
+  ShoppingCart,
 };

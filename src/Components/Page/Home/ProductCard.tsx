@@ -2,7 +2,7 @@ import React from "react";
 import { ApiResponse, Product, User } from "../../../Interfaces";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-// import { useUpdateShoppingCartMutation } from "../../../Apis/shoppingCartApi";
+import { useUpsertShoppingCartMutation } from "../../../APIs/shoppingCart";
 import { MiniLoader } from "../Common";
 import { toastNotify } from "../../../Helper";
 import { useSelector } from "react-redux";
@@ -15,28 +15,28 @@ interface Props {
 function ProductCard(props: Props) {
   const navigate = useNavigate();
   const [isAddingToCart, setIsAddingToCart] = useState<boolean>(false);
-  // const [updateShoppingCart] = useUpdateShoppingCartMutation();
+  const [updateShoppingCart] = useUpsertShoppingCartMutation();
   const userData: User = useSelector((state: RootState) => state.userAuthStore);
 
-  // const handleAddToCart = async (menuItemId: number) => {
-  //   if (!userData.id) {
-  //     navigate("/login");
-  //     return;
-  //   }
-  //   setIsAddingToCart(true);
+  const handleAddToCart = async (menuItemId: number) => {
+    if (!userData.id) {
+      navigate("/login");
+      return;
+    }
+    setIsAddingToCart(true);
 
-  //   const response: ApiResponse = await updateShoppingCart({
-  //     menuItemId: menuItemId,
-  //     updateQuantityBy: 1,
-  //     userId: userData.id,
-  //   });
+    const response: ApiResponse = await updateShoppingCart({
+      menuItemId: menuItemId,
+      updateQuantityBy: 1,
+      userId: userData.id,
+    });
 
-  //   if (response.data && response.data.isSuccess) {
-  //     toastNotify("Item added to cart successfully!");
-  //   }
+    if (response.data && response.data.isSuccess) {
+      toastNotify("Item added to cart successfully!");
+    }
 
-  //   setIsAddingToCart(false);
-  // };
+    setIsAddingToCart(false);
+  };
 
   return (
     <div className="col-md-4 col-12 p-4">
@@ -73,7 +73,7 @@ function ProductCard(props: Props) {
               </i>
             )}
 
-          {/* {isAddingToCart ? (
+          {isAddingToCart ? (
             <div
               style={{
                 position: "absolute",
@@ -85,7 +85,7 @@ function ProductCard(props: Props) {
             </div>
           ) : (
             <i
-              onClick={() => handleAddToCart(props.menuItem.id)}
+              onClick={() => handleAddToCart(props.product.id)}
               className="bi bi-cart-plus btn btn-outline-danger"
               style={{
                 position: "absolute",
@@ -97,7 +97,7 @@ function ProductCard(props: Props) {
                 cursor: "pointer",
               }}
             ></i>
-          )} */}
+          )}
 
           <div className="text-center">
             <Link

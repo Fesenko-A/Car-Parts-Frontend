@@ -4,7 +4,7 @@ import { useRegisterUserMutation } from "../APIs/authApi";
 import { ApiResponse } from "../Interfaces";
 import { useNavigate } from "react-router-dom";
 import { MainLoader } from "../Components/Page/Common";
-import { Roles } from "../Static/Roles";
+import { Roles } from "../Static";
 
 function Register() {
   const [registerUser] = useRegisterUserMutation();

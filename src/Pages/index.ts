@@ -6,6 +6,7 @@ import Register from "./Register";
 import ProductList from "./Product/ProductList";
 import ProductDetails from "./ProductDetails";
 import ShoppingCart from "./ShoppingCart";
+import Payment from "./Payment";
 
 export {
   Login,
@@ -16,4 +17,5 @@ export {
   ProductList,
   ProductDetails,
   ShoppingCart,
+  Payment,
 };

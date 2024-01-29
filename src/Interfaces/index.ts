@@ -6,6 +6,8 @@ import SpecialTag from "./SpecialTag";
 import Product from "./Product";
 import ShoppingCart from "./ShoppingCart";
 import CartItem from "./CartItem";
+import Order from "./Order";
+import OrderDetails from "./OrderDetails";
 
 export type {
   User,
@@ -16,4 +18,6 @@ export type {
   Product,
   ShoppingCart,
   CartItem,
+  Order,
+  OrderDetails,
 };

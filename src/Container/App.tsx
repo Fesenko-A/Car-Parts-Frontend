@@ -9,6 +9,7 @@ import {
   ProductList,
   ProductDetails,
   ShoppingCart,
+  Payment,
 } from "../Pages";
 import { Routes, Route } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -60,6 +61,7 @@ function App() {
             path="/productDetails/:productId"
             element={<ProductDetails />}
           ></Route>
+          <Route path="/payment" element={<Payment />} />
           <Route path="*" element={<NotFound />}></Route>
         </Routes>
       </div>

@@ -1,6 +1,6 @@
 import React from "react";
 
-function MiniLoader({ type = "success", size = 100 }) {
+function MiniLoader({ type = "primary", size = 100 }) {
   return (
     <div
       className={`spinner-border text-${type}`}

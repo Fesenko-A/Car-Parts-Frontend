@@ -59,7 +59,7 @@ function CartPickupDetails() {
 
   return (
     <div className="border pb-5 pt-3">
-      <h1 style={{ fontWeight: "300" }} className="text-center text-success">
+      <h1 style={{ fontWeight: "300" }} className="text-center text-primary">
         Pickup Details
       </h1>
       <hr />
@@ -112,7 +112,7 @@ function CartPickupDetails() {
 
         <button
           type="submit"
-          className="btn btn-lg btn-success form-control mt-3"
+          className="btn btn-lg btn-primary form-control mt-3"
           disabled={loading}
         >
           {loading ? <MiniLoader /> : "Looks Good? Place Order!"}

@@ -59,7 +59,7 @@ function CartSummary() {
               src={cartItem.product?.imageUrl}
               alt=""
               width={"120 px"}
-              className="rounded-circle"
+              style={{ borderRadius: "25px" }}
             />
           </div>
 
@@ -72,7 +72,7 @@ function CartSummary() {
             </div>
 
             <div className="flex-fill">
-              <h4 className="text-success">${cartItem.product!.price}</h4>
+              <h4 className="text-primary">${cartItem.product!.price}</h4>
             </div>
 
             <div

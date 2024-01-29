@@ -2,7 +2,7 @@ import React from "react";
 import { ApiResponse, Product, User } from "../../../Interfaces";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { useUpsertShoppingCartMutation } from "../../../APIs/shoppingCart";
+import { useUpsertShoppingCartMutation } from "../../../APIs/shoppingCartApi";
 import { MiniLoader } from "../Common";
 import { toastNotify } from "../../../Helper";
 import { useSelector } from "react-redux";
@@ -18,7 +18,7 @@ function ProductCard(props: Props) {
   const [updateShoppingCart] = useUpsertShoppingCartMutation();
   const userData: User = useSelector((state: RootState) => state.userAuthStore);
 
-  const handleAddToCart = async (menuItemId: number) => {
+  const handleAddToCart = async (productId: number) => {
     if (!userData.id) {
       navigate("/login");
       return;
@@ -26,7 +26,7 @@ function ProductCard(props: Props) {
     setIsAddingToCart(true);
 
     const response: ApiResponse = await updateShoppingCart({
-      menuItemId: menuItemId,
+      productId: productId,
       updateQuantityBy: 1,
       userId: userData.id,
     });

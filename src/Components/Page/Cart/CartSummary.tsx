@@ -6,7 +6,7 @@ import {
   removeFromCart,
   updateQuantity,
 } from "../../../Storage/shoppingCartSlice";
-import { useUpsertShoppingCartMutation } from "../../../APIs/shoppingCart";
+import { useUpsertShoppingCartMutation } from "../../../APIs/shoppingCartApi";
 
 function CartSummary() {
   const dispatch = useDispatch();

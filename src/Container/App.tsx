@@ -16,7 +16,7 @@ import { User } from "../Interfaces";
 import jwtDecode from "jwt-decode";
 import { setLoggedInUser } from "../Storage/userAuthSlice";
 import { RootState } from "../Storage/store";
-import { useGetShoppingCartQuery } from "../APIs/shoppingCart";
+import { useGetShoppingCartQuery } from "../APIs/shoppingCartApi";
 import { setShoppingCart } from "../Storage/shoppingCartSlice";
 
 function App() {

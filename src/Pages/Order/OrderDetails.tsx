@@ -10,15 +10,15 @@ function OrderDetails() {
 
   if (!isLoading && data?.result) {
     userInput = {
-      name: data.result[0].pickupName,
-      email: data.result[0].pickupEmail,
-      phoneNumber: data.result[0].pickupPhoneNumber,
+      name: data.result.pickupName,
+      email: data.result.pickupEmail,
+      phoneNumber: data.result.pickupPhoneNumber,
     };
     orderDetails = {
-      id: data.result[0].orderId,
-      cartItems: data.result[0].orderDetails,
-      cartTotal: data.result[0].orderTotal,
-      status: data.result[0].status,
+      id: data.result.orderId,
+      cartItems: data.result.orderDetails,
+      cartTotal: data.result.orderTotal,
+      status: data.result.status,
     };
   }
 

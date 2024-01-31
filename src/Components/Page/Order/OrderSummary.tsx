@@ -13,7 +13,7 @@ function OrderSummary({ data, userInput }: OrderSummaryProps) {
   const badgeTypeColor = getStatusColor(data.status!);
   const navigate = useNavigate();
   const [loading, setIsLoading] = useState(false);
-  const [updateOrderHeader] = useUpdateOrderMutation();
+  const [updateOrder] = useUpdateOrderMutation();
   const userData = useSelector((state: RootState) => state.userAuthStore);
   const nextStatus: any =
     data.status! === Statuses.CONFIRMED
@@ -27,7 +27,7 @@ function OrderSummary({ data, userInput }: OrderSummaryProps) {
 
   const handleNextStatus = async () => {
     setIsLoading(true);
-    await updateOrderHeader({
+    await updateOrder({
       orderId: data.id,
       status: nextStatus.value,
     });
@@ -36,7 +36,7 @@ function OrderSummary({ data, userInput }: OrderSummaryProps) {
 
   const handleCancel = async () => {
     setIsLoading(true);
-    await updateOrderHeader({
+    await updateOrder({
       orderId: data.id,
       status: Statuses.CANCELLED,
     });
@@ -51,7 +51,7 @@ function OrderSummary({ data, userInput }: OrderSummaryProps) {
           &nbsp;
           <div className="d-flex justify-content-between align-items-center">
             <h3 className="text-primary">Order Summary</h3>
-            <span className={`btn btn-outline-${badgeTypeColor} fs-6`}>
+            <span className={`btn btn-${badgeTypeColor} fs-6 active`}>
               {data.status}
             </span>
           </div>

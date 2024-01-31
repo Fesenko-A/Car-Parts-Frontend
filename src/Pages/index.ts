@@ -7,6 +7,10 @@ import ProductList from "./Product/ProductList";
 import ProductDetails from "./ProductDetails";
 import ShoppingCart from "./ShoppingCart";
 import Payment from "./Payment";
+import AllOrders from "./Order/AllOrders";
+import OrderDetails from "./Order/OrderDetails";
+import OrderConfirmed from "./Order/OrderConfirmed";
+import MyOrders from "./Order/MyOrders";
 
 export {
   Login,
@@ -18,4 +22,8 @@ export {
   ProductDetails,
   ShoppingCart,
   Payment,
+  AllOrders,
+  MyOrders,
+  OrderConfirmed,
+  OrderDetails,
 };

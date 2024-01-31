@@ -15,7 +15,7 @@ function MainLoader() {
       }}
     >
       <div
-        className="spinner-border text-success"
+        className="spinner-border text-primary"
         style={{ width: "4rem", height: "4rem" }}
       ></div>
     </div>

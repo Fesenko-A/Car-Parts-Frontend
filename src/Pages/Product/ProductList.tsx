@@ -34,7 +34,7 @@ function ProductList() {
       {!isLoading && (
         <div className="table p-5">
           <div className="d-flex align-items-center justify-content-between">
-            <h1 className="text-success">List of Products</h1>
+            <h1 className="text-primary">List of Products</h1>
             {/* <button
               className="btn btn-primary"
               onClick={() => navigate("/menuItem/menuItemUpsert")}
@@ -65,7 +65,7 @@ function ProductList() {
                       style={{
                         width: "100%",
                         maxWidth: "120px",
-                        borderRadius: "50px",
+                        borderRadius: "20px",
                       }}
                     />
                   </div>

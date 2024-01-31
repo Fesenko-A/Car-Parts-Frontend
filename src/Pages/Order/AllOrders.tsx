@@ -61,7 +61,7 @@ function AllOrders() {
               <input
                 type="text"
                 className="form-control mx-2"
-                placeholder="Search Name or Phone"
+                placeholder="Search for Name, Phone or Email"
                 name="searchString"
                 onChange={handleChange}
               />

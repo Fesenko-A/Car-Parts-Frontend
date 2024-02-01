@@ -8,12 +8,15 @@ import { ApiResponse, User } from "../Interfaces";
 import { toastNotify } from "../Helper";
 import { useSelector } from "react-redux";
 import { RootState } from "../Storage/store";
+import { useUpsertShoppingCartMutation } from "../APIs/shoppingCartApi";
 
 function ProductDetails() {
   const { productId } = useParams();
   const { data, isLoading } = useGetProductByIdQuery(productId);
   const navigate = useNavigate();
   const [quantity, setQuantity] = useState(1);
+  const [updateShoppingCart] = useUpsertShoppingCartMutation();
+  const [isAddingToCart, setIsAddingToCart] = useState<boolean>(false);
   const userData: User = useSelector((state: RootState) => state.userAuthStore);
 
   const handleQuantity = (counter: number) => {
@@ -25,26 +28,26 @@ function ProductDetails() {
     return;
   };
 
-  // const handleAddToCart = async (menuItemId: number) => {
-  //   if (!userData.id) {
-  //     navigate("/login");
-  //     return;
-  //   }
+  const handleAddToCart = async (productId: number) => {
+    if (!userData.id) {
+      navigate("/login");
+      return;
+    }
 
-  //   setIsAddingToCart(true);
+    setIsAddingToCart(true);
 
-  //   const response: ApiResponse = await updateShoppingCart({
-  //     menuItemId: menuItemId,
-  //     updateQuantityBy: quantity,
-  //     userId: userData.id,
-  //   });
+    const response: ApiResponse = await updateShoppingCart({
+      productId: productId,
+      updateQuantityBy: quantity,
+      userId: userData.id,
+    });
 
-  //   if (response.data && response.data.isSuccess) {
-  //     toastNotify("Item added to cart successfully!");
-  //   }
+    if (response.data && response.data.isSuccess) {
+      toastNotify("Item added to cart successfully!");
+    }
 
-  //   setIsAddingToCart(false);
-  // };
+    setIsAddingToCart(false);
+  };
 
   return (
     <div className="container pt-4 pt-md-5">
@@ -105,18 +108,18 @@ function ProductDetails() {
             </span>
             <div className="row pt-4">
               <div className="col-5">
-                {/* {isAddingToCart ? (
-                  <button disabled className="btn btn-success form-control">
+                {isAddingToCart ? (
+                  <button disabled className="btn btn-primary form-control">
                     <MiniLoader size={30} />
                   </button>
                 ) : (
                   <button
-                    className="btn btn-success form-control"
+                    className="btn btn-primary form-control"
                     onClick={() => handleAddToCart(data.result?.id)}
                   >
                     Add to Cart
                   </button>
-                )} */}
+                )}
               </div>
 
               <div className="col-5">

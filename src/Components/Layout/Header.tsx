@@ -46,11 +46,6 @@ function Header() {
                 Home
               </NavLink>
             </li>
-            <li className="nav-item">
-              <NavLink className="nav-link" aria-current="page" to="/2">
-                Categories
-              </NavLink>
-            </li>
             {userData.role === Roles.ADMIN ? (
               <li className="nav-item dropdown">
                 <a

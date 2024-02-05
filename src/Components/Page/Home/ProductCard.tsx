@@ -109,9 +109,6 @@ function ProductCard(props: Props) {
             </Link>
             <p style={{ fontSize: "14px" }}>{props.product.category.name}</p>
           </div>
-          <p className="card-text" style={{ textAlign: "center" }}>
-            {props.product.description}
-          </p>
           <div className="row text-center">
             <h4>${props.product.price}</h4>
           </div>

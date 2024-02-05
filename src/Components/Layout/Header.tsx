@@ -47,11 +47,6 @@ function Header() {
               </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink className="nav-link" aria-current="page" to="/1">
-                Brands
-              </NavLink>
-            </li>
-            <li className="nav-item">
               <NavLink className="nav-link" aria-current="page" to="/2">
                 Categories
               </NavLink>

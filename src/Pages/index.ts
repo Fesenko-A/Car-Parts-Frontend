@@ -11,6 +11,7 @@ import AllOrders from "./Order/AllOrders";
 import OrderDetails from "./Order/OrderDetails";
 import OrderConfirmed from "./Order/OrderConfirmed";
 import MyOrders from "./Order/MyOrders";
+import ProductUpsert from "./Product/ProductUpsert";
 
 export {
   Login,
@@ -26,4 +27,5 @@ export {
   MyOrders,
   OrderConfirmed,
   OrderDetails,
+  ProductUpsert,
 };

@@ -14,6 +14,7 @@ import {
   OrderDetails,
   AllOrders,
   OrderConfirmed,
+  ProductUpsert,
 } from "../Pages";
 import { Routes, Route } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -61,6 +62,11 @@ function App() {
           <Route path="/accessDenied" element={<AccessDenied />} />
           <Route path="/shoppingCart" element={<ShoppingCart />} />
           <Route path="/product/productList" element={<ProductList />} />
+          <Route path="/product/productUpsert" element={<ProductUpsert />} />
+          <Route
+            path="/product/productUpsert/:id"
+            element={<ProductUpsert />}
+          />
           <Route
             path="/productDetails/:productId"
             element={<ProductDetails />}

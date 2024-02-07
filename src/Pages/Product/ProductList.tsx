@@ -35,12 +35,12 @@ function ProductList() {
         <div className="table p-5">
           <div className="d-flex align-items-center justify-content-between">
             <h1 className="text-primary">List of Products</h1>
-            {/* <button
+            <button
               className="btn btn-primary"
-              onClick={() => navigate("/menuItem/menuItemUpsert")}
+              onClick={() => navigate("/product/productUpsert")}
             >
               Add New
-            </button> */}
+            </button>
           </div>
           <div className="p-2">
             <div className="row border">
@@ -75,14 +75,14 @@ function ProductList() {
                   <div className="col-1">${product.price}</div>
                   <div className="col-2">{product.specialTag.name}</div>
                   <div className="col-1">
-                    {/* <button
-                      className="btn btn-success"
+                    <button
+                      className="btn btn-primary"
                       onClick={() =>
-                        navigate("/menuItem/menuItemUpsert/" + product.id)
+                        navigate("/product/productUpsert/" + product.id)
                       }
                     >
                       <i className="bi bi-pencil-fill" />
-                    </button> */}
+                    </button>
                     <button
                       className="btn btn-danger mx-2"
                       onClick={() => handleProductDelete(product.id)}

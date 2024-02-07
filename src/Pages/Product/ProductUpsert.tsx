@@ -7,13 +7,17 @@ import {
 } from "../../APIs/productApi";
 import { useNavigate, useParams } from "react-router-dom";
 import { MainLoader } from "../../Components/Page/Common";
+import { useGetAllBrandsQuery } from "../../APIs/brandApi";
+import { Brand, Category, SpecialTag } from "../../Interfaces";
+import { useGetAllCategoriesQuery } from "../../APIs/categoriesApi";
+import { useGetAllSpecialTagsQuery } from "../../APIs/specialTagsApi";
 
 const productData = {
-  brandId: "",
+  brandId: "1",
   name: "",
   description: "",
-  specialTagId: "",
-  categoryId: "",
+  specialTagId: "1",
+  categoryId: "1",
   price: "",
   imageUrl: "",
 };
@@ -26,24 +30,43 @@ function ProductUpsert() {
   const [updateProduct] = useUpdateProductMutation();
   const navigate = useNavigate();
 
-  const { data } = useGetProductByIdQuery(id);
+  const [brands, setBrands] = useState<Brand[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [specialTags, setSpecialTags] = useState<SpecialTag[]>([]);
+
+  const { data: brandsData } = useGetAllBrandsQuery(null);
+  const { data: categoriesData } = useGetAllCategoriesQuery(null);
+  const { data: specialTagsData } = useGetAllSpecialTagsQuery(null);
+  const { data: productsData } = useGetProductByIdQuery(id);
 
   useEffect(() => {
-    if (data && data.result) {
+    if (productsData && productsData.result) {
       const tempData = {
-        brandId: data.result.brandId,
-        name: data.result.name,
-        description: data.result.description,
-        specialTagId: data.result.specialTagId,
-        categoryId: data.result.categoryId,
-        price: data.result.price,
-        imageUrl: data.result.imageUrl,
+        brandId: productsData.result.brandId,
+        name: productsData.result.name,
+        description: productsData.result.description,
+        specialTagId: productsData.result.specialTagId,
+        categoryId: productsData.result.categoryId,
+        price: productsData.result.price,
+        imageUrl: productsData.result.imageUrl,
       };
       setProductInputs(tempData);
     }
-  }, [data]);
+  }, [productsData]);
 
-  const handleMenuItemInput = (
+  useEffect(() => {
+    if (brandsData) {
+      setBrands(brandsData.result);
+    }
+    if (categoriesData) {
+      setCategories(categoriesData.result);
+    }
+    if (specialTagsData) {
+      setSpecialTags(specialTagsData.result);
+    }
+  }, [brandsData, categoriesData, specialTagsData]);
+
+  const handleProductInput = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
     >
@@ -62,22 +85,21 @@ function ProductUpsert() {
     formData.append("BrandId", productInputs.brandId);
     formData.append("SpecialTagId", productInputs.specialTagId);
     formData.append("CategoryId", productInputs.categoryId);
-    formData.append("Price", productInputs.price);
+    formData.append("Price", productInputs.price.replace(".", ","));
     formData.append("ImageUrl", productInputs.imageUrl);
 
     let response;
     if (id) {
       formData.append("Id", id);
       response = await updateProduct({ data: formData, id });
-      toastNotify("Menu Item updated successfully!", "success");
+      toastNotify("Product updated successfully!", "success");
     } else {
       response = await createProduct(formData);
-      toastNotify("Menu Item created successfully!", "success");
+      toastNotify("Product created successfully!", "success");
     }
 
     if (response) {
       setLoading(false);
-      console.log(response);
       navigate("/product/productList");
     }
 
@@ -100,57 +122,53 @@ function ProductUpsert() {
               required
               name="name"
               value={productInputs.name}
-              onChange={handleMenuItemInput}
+              onChange={handleProductInput}
             />
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Enter Brand"
+
+            <select
+              className="form-control mt-3 form-select"
               required
               name="brandId"
               value={productInputs.brandId}
-              onChange={handleMenuItemInput}
-            />
+              onChange={handleProductInput}
+            >
+              {brands.map((brand: Brand) => (
+                <option value={brand.id}>{brand.name}</option>
+              ))}
+            </select>
+
             <textarea
               className="form-control mt-3"
               placeholder="Enter Description"
               name="description"
               rows={10}
               value={productInputs.description}
-              onChange={handleMenuItemInput}
+              onChange={handleProductInput}
             />
-            <input
-              type="number"
-              className="form-control mt-3"
-              placeholder="Enter Special Tag"
+
+            <select
+              className="form-control mt-3 form-select"
               required
               name="specialTagId"
               value={productInputs.specialTagId}
-              onChange={handleMenuItemInput}
-            />
-            <input
-              type="number"
-              className="form-control mt-3"
-              placeholder="Enter Category"
-              required
-              name="categoryId"
-              value={productInputs.categoryId}
-              onChange={handleMenuItemInput}
-            />
-            {/* <select
-              className="form-control mt-3 form-select"
-              //placeholder="Enter Category"
-              required
-              name="categoryId"
-              value={productInputs.categoryId}
-              onChange={handleMenuItemInput}
+              onChange={handleProductInput}
             >
-              {/* {categories.map((category) => (
-                <option value={category} key={category}>
-                  {category}
-                </option>
-              ))} */}
-            {/* </select>  */}
+              {specialTags.map((specialTag: SpecialTag) => (
+                <option value={specialTag.id}>{specialTag.name}</option>
+              ))}
+            </select>
+
+            <select
+              className="form-control mt-3 form-select"
+              required
+              name="categoryId"
+              value={productInputs.categoryId}
+              onChange={handleProductInput}
+            >
+              {categories.map((category: Category) => (
+                <option value={category.id}>{category.name}</option>
+              ))}
+            </select>
 
             <input
               type="number"
@@ -159,8 +177,9 @@ function ProductUpsert() {
               required
               name="price"
               value={productInputs.price}
-              onChange={handleMenuItemInput}
+              onChange={handleProductInput}
             />
+
             <input
               type="text"
               className="form-control mt-3"
@@ -168,7 +187,7 @@ function ProductUpsert() {
               required
               name="imageUrl"
               value={productInputs.imageUrl}
-              onChange={handleMenuItemInput}
+              onChange={handleProductInput}
             />
             <div className="row">
               <div className="col-6">

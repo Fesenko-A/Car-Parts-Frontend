@@ -13,6 +13,8 @@ import {
 } from "../../APIs/specialTagsApi";
 import { Brand, Category, SpecialTag } from "../../Interfaces";
 import { inputHelper, toastNotify } from "../../Helper";
+import { withAdminAuth } from "../../HOC";
+import { MainLoader } from "../../Components/Page/Common";
 
 const brandInputsData = {
   name: "",
@@ -110,6 +112,8 @@ function ProductInformation() {
   };
 
   useEffect(() => {
+    setLoading(true);
+
     if (brandsData) {
       setBrands(brandsData.result);
     }
@@ -119,173 +123,191 @@ function ProductInformation() {
     if (specialTagsData) {
       setSpecialTags(specialTagsData.result);
     }
+
+    setLoading(false);
   }, [brandsData, categoriesData, specialTagsData]);
 
   return (
-    <div className="container mt-5 ">
-      <div className="accordion" id="accordionPanelsStayOpenExample">
-        <div className="accordion-item">
-          <h2 className="accordion-header">
-            <button
-              className="accordion-button"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#panelsStayOpen-collapseOne"
-              aria-expanded="true"
-              aria-controls="panelsStayOpen-collapseOne"
-            >
-              Brands
-            </button>
-          </h2>
-          <div
-            id="panelsStayOpen-collapseOne"
-            className="accordion-collapse collapse show"
-          >
-            <div className="accordion-body p-2 bg-light">
-              <ul className="list-group" style={{ listStyleType: "none" }}>
-                <li>
-                  <form
-                    encType="multipart/form-data"
-                    method="post"
-                    className="input-group mb-3"
-                    onSubmit={handleSumbitBrand}
+    <>
+      <div className="container mt-5 ">
+        <div className="accordion" id="accordionPanelsStayOpenExample">
+          {loading && <MainLoader />}
+          {!loading && (
+            <>
+              <div className="accordion-item">
+                <h2 className="accordion-header">
+                  <button
+                    className="accordion-button"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#panelsStayOpen-collapseOne"
+                    aria-expanded="true"
+                    aria-controls="panelsStayOpen-collapseOne"
                   >
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder="Enter Brand name"
-                      required
-                      name="name"
-                      value={brandInputs.name}
-                      onChange={handleBrandInput}
-                    />
-                    <button
-                      className="btn btn-primary input-group-text"
-                      id="basic-addon2"
-                      type="submit"
+                    Brands
+                  </button>
+                </h2>
+                <div
+                  id="panelsStayOpen-collapseOne"
+                  className="accordion-collapse collapse show"
+                >
+                  <div className="accordion-body p-2 bg-light">
+                    <ul
+                      className="list-group"
+                      style={{ listStyleType: "none" }}
                     >
-                      <i className="bi bi-plus-lg"></i>
-                    </button>
-                  </form>
-                </li>
-                {brands.map((brand: Brand) => (
-                  <li className="list-group-item list-group-item-action">
-                    {brand.name}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div className="accordion-item">
-          <h2 className="accordion-header">
-            <button
-              className="accordion-button collapsed"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#panelsStayOpen-collapseTwo"
-              aria-expanded="false"
-              aria-controls="panelsStayOpen-collapseTwo"
-            >
-              Categories
-            </button>
-          </h2>
-          <div
-            id="panelsStayOpen-collapseTwo"
-            className="accordion-collapse collapse"
-          >
-            <div className="accordion-body p-2 bg-light">
-              <ul className="list-group" style={{ listStyleType: "none" }}>
-                <li>
-                  <form
-                    encType="multipart/form-data"
-                    method="post"
-                    className="input-group mb-3"
-                    onSubmit={handleSumbitCategory}
+                      <li>
+                        <form
+                          encType="multipart/form-data"
+                          method="post"
+                          className="input-group mb-3"
+                          onSubmit={handleSumbitBrand}
+                        >
+                          <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Enter Brand name"
+                            required
+                            name="name"
+                            value={brandInputs.name}
+                            onChange={handleBrandInput}
+                          />
+                          <button
+                            className="btn btn-primary input-group-text"
+                            id="basic-addon2"
+                            type="submit"
+                          >
+                            <i className="bi bi-plus-lg"></i>
+                          </button>
+                        </form>
+                      </li>
+                      {brands.map((brand: Brand) => (
+                        <li className="list-group-item list-group-item-action">
+                          {brand.name}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div className="accordion-item">
+                <h2 className="accordion-header">
+                  <button
+                    className="accordion-button collapsed"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#panelsStayOpen-collapseTwo"
+                    aria-expanded="false"
+                    aria-controls="panelsStayOpen-collapseTwo"
                   >
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder="Enter Category name"
-                      required
-                      name="name"
-                      value={categoryInputs.name}
-                      onChange={handleCategoryInput}
-                    />
-                    <button
-                      className="btn btn-primary input-group-text"
-                      id="basic-addon2"
-                      type="submit"
+                    Categories
+                  </button>
+                </h2>
+                <div
+                  id="panelsStayOpen-collapseTwo"
+                  className="accordion-collapse collapse"
+                >
+                  <div className="accordion-body p-2 bg-light">
+                    <ul
+                      className="list-group"
+                      style={{ listStyleType: "none" }}
                     >
-                      <i className="bi bi-plus-lg"></i>
-                    </button>
-                  </form>
-                </li>
-                {categories.map((category: Category) => (
-                  <li className="list-group-item list-group-item-action">
-                    {category.name}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div className="accordion-item">
-          <h2 className="accordion-header">
-            <button
-              className="accordion-button collapsed"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#panelsStayOpen-collapseThree"
-              aria-expanded="false"
-              aria-controls="panelsStayOpen-collapseThree"
-            >
-              Special Tags
-            </button>
-          </h2>
-          <div
-            id="panelsStayOpen-collapseThree"
-            className="accordion-collapse collapse"
-          >
-            <div className="accordion-body p-2 bg-light">
-              <ul className="list-group" style={{ listStyleType: "none" }}>
-                <li>
-                  <form
-                    encType="multipart/form-data"
-                    method="post"
-                    className="input-group mb-3"
-                    onSubmit={handleSumbitSpecialTag}
+                      <li>
+                        <form
+                          encType="multipart/form-data"
+                          method="post"
+                          className="input-group mb-3"
+                          onSubmit={handleSumbitCategory}
+                        >
+                          <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Enter Category name"
+                            required
+                            name="name"
+                            value={categoryInputs.name}
+                            onChange={handleCategoryInput}
+                          />
+                          <button
+                            className="btn btn-primary input-group-text"
+                            id="basic-addon2"
+                            type="submit"
+                          >
+                            <i className="bi bi-plus-lg"></i>
+                          </button>
+                        </form>
+                      </li>
+                      {categories.map((category: Category) => (
+                        <li className="list-group-item list-group-item-action">
+                          {category.name}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div className="accordion-item">
+                <h2 className="accordion-header">
+                  <button
+                    className="accordion-button collapsed"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#panelsStayOpen-collapseThree"
+                    aria-expanded="false"
+                    aria-controls="panelsStayOpen-collapseThree"
                   >
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder="Enter Special Tag name"
-                      required
-                      name="name"
-                      value={specialTagInputs.name}
-                      onChange={handleSpecialTagInput}
-                    />
-                    <button
-                      className="btn btn-primary input-group-text"
-                      id="basic-addon2"
-                      type="submit"
+                    Special Tags
+                  </button>
+                </h2>
+                <div
+                  id="panelsStayOpen-collapseThree"
+                  className="accordion-collapse collapse"
+                >
+                  <div className="accordion-body p-2 bg-light">
+                    <ul
+                      className="list-group"
+                      style={{ listStyleType: "none" }}
                     >
-                      <i className="bi bi-plus-lg"></i>
-                    </button>
-                  </form>
-                </li>
-                {specialTags.map((specialTag: SpecialTag) => (
-                  <li className="list-group-item list-group-item-action">
-                    {specialTag.name}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
+                      <li>
+                        <form
+                          encType="multipart/form-data"
+                          method="post"
+                          className="input-group mb-3"
+                          onSubmit={handleSumbitSpecialTag}
+                        >
+                          <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Enter Special Tag name"
+                            required
+                            name="name"
+                            value={specialTagInputs.name}
+                            onChange={handleSpecialTagInput}
+                          />
+                          <button
+                            className="btn btn-primary input-group-text"
+                            id="basic-addon2"
+                            type="submit"
+                          >
+                            <i className="bi bi-plus-lg"></i>
+                          </button>
+                        </form>
+                      </li>
+                      {specialTags.map((specialTag: SpecialTag) => (
+                        <li className="list-group-item list-group-item-action">
+                          {specialTag.name}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
-export default ProductInformation;
+export default withAdminAuth(ProductInformation);

@@ -85,42 +85,6 @@ function AllOrders() {
             </div>
           </div>
           <OrderList isLoading={isLoading} orderData={orderData} />
-          {/* <div className="d-flex mx-5 justify-content-end align-items-center">
-            <div>Rows per Page: </div>
-            <div>
-              <select
-                className="form-select mx-2"
-                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-                  handlePageOptionChange("change", Number(e.target.value));
-                  setCurrentPageSize(Number(e.target.value));
-                }}
-                style={{ width: "80px" }}
-                value={currentPageSize}
-              >
-                <option>5</option>
-                <option>10</option>
-                <option>15</option>
-                <option>20</option>
-              </select>
-            </div> */}
-          {/* <div className="mx-2">{getPageDetails()}</div>
-            <button
-              onClick={() => handlePageOptionChange("prev")}
-              disabled={pageOptions.pageNumber === 1}
-              className="btn btn-outline-primary px-3 mx-2"
-            >
-              <i className="bi bi-chevron-left" />
-            </button>
-            <button
-              onClick={() => handlePageOptionChange("next")}
-              disabled={
-                pageOptions.pageNumber * pageOptions.pageSize >= totalRecords
-              }
-              className="btn btn-outline-primary px-3 mx-2"
-            >
-              <i className="bi bi-chevron-right" />
-            </button>
-          </div> */}
         </>
       )}
     </>

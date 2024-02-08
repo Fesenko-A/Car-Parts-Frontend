@@ -57,7 +57,7 @@ function ProductCard(props: Props) {
           {props.product.specialTag.name.length > 1 &&
             props.product.specialTag && (
               <i
-                className="bi bi-heart btn btn-success"
+                className="bi bi-heart btn btn-primary active"
                 style={{
                   position: "absolute",
                   top: "15px",

@@ -5,6 +5,4 @@ export default interface ShoppingCart {
   userId?: string;
   cartItems?: CartItem[];
   cartTotal?: number;
-  paymentId?: any;
-  clientSecret?: any;
 }

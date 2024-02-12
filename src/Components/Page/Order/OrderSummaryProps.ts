@@ -1,5 +1,5 @@
 import { ShoppingCart } from "../../../Interfaces";
-import { Statuses } from "../../../Static";
+import { OrderStatuses } from "../../../Static";
 
 export interface OrderSummaryProps {
   data: {
@@ -8,7 +8,7 @@ export interface OrderSummaryProps {
     cartTotal?: number;
     userId?: string;
     paymentId?: string;
-    status?: Statuses;
+    status?: OrderStatuses;
   };
   userInput: {
     name: string;

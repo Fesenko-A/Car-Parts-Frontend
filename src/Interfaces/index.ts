@@ -8,6 +8,8 @@ import ShoppingCart from "./ShoppingCart";
 import CartItem from "./CartItem";
 import Order from "./Order";
 import OrderDetails from "./OrderDetails";
+import OnlinePayment from "./OnlinePayment";
+import PaymentMethod from "./PaymentMethod";
 
 export type {
   User,
@@ -20,4 +22,6 @@ export type {
   CartItem,
   Order,
   OrderDetails,
+  OnlinePayment,
+  PaymentMethod,
 };

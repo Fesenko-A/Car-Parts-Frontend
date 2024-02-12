@@ -4,14 +4,14 @@ import { useGetAllOrdersQuery } from "../../APIs/orderApi";
 import { OrderList } from "../../Components/Page/Order";
 import { MainLoader } from "../../Components/Page/Common";
 import { inputHelper } from "../../Helper";
-import { Statuses } from "../../Static";
+import { OrderStatuses } from "../../Static";
 
 const filterOptions = [
   "All",
-  Statuses.CONFIRMED,
-  Statuses.PROCESSING,
-  Statuses.READY,
-  Statuses.CANCELLED,
+  OrderStatuses.CONFIRMED,
+  OrderStatuses.PROCESSING,
+  OrderStatuses.READY,
+  OrderStatuses.CANCELLED,
 ];
 
 function AllOrders() {

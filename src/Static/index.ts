@@ -1,5 +1,6 @@
 import { Roles } from "./Roles";
-import { Statuses } from "./Statuses";
+import { OrderStatuses } from "./OrderStatuses";
 import { SortingTypes } from "./SortingTypes";
+import { PaymentStatuses } from "./PaymentStatuses";
 
-export { Roles, Statuses, SortingTypes };
+export { Roles, OrderStatuses, SortingTypes, PaymentStatuses };

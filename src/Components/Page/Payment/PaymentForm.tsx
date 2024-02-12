@@ -8,7 +8,7 @@ import { toastNotify } from "../../../Helper";
 import { OrderSummaryProps } from "../Order/OrderSummaryProps";
 import { ApiResponse, CartItem } from "../../../Interfaces";
 import { useCreateOrderMutation } from "../../../APIs/orderApi";
-import { Statuses } from "../../../Static";
+import { OrderStatuses } from "../../../Static";
 import { useNavigate } from "react-router-dom";
 
 const PaymentForm = ({ data, userInput }: OrderSummaryProps) => {
@@ -62,14 +62,14 @@ const PaymentForm = ({ data, userInput }: OrderSummaryProps) => {
         paymentId: data.paymentId,
         status:
           result.paymentIntent.status === "succeeded"
-            ? Statuses.CONFIRMED
-            : Statuses.PENDING,
+            ? OrderStatuses.CONFIRMED
+            : OrderStatuses.PENDING,
         totalItems: totalItems,
         orderDetails: orderDetailsDTO,
       });
 
       if (response) {
-        if (response.data?.result.status === Statuses.CONFIRMED) {
+        if (response.data?.result.status === OrderStatuses.CONFIRMED) {
           navigate(`/order/orderConfirmed/${response.data.result.orderId}`);
         } else {
           navigate("/failed");

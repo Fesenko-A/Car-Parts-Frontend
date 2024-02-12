@@ -1,17 +1,17 @@
-import { Statuses } from "../Static";
+import { OrderStatuses } from "../Static";
 
-const getStatusColor = (status: Statuses) => {
-  return status === Statuses.CONFIRMED
+const getStatusColor = (status: OrderStatuses) => {
+  return status === OrderStatuses.CONFIRMED
     ? "primary"
-    : status === Statuses.PENDING
+    : status === OrderStatuses.PENDING
     ? "secondary"
-    : status === Statuses.CANCELLED
+    : status === OrderStatuses.CANCELLED
     ? "danger"
-    : status === Statuses.COMPLETED
+    : status === OrderStatuses.COMPLETED
     ? "success"
-    : status === Statuses.PROCESSING
+    : status === OrderStatuses.PROCESSING
     ? "info"
-    : status === Statuses.READY && "warning";
+    : status === OrderStatuses.READY && "warning";
 };
 
 export default getStatusColor;

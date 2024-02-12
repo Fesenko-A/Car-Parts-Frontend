@@ -3,7 +3,7 @@ import { OrderSummaryProps } from "./OrderSummaryProps";
 import { CartItem } from "../../../Interfaces";
 import { getStatusColor } from "../../../Helper";
 import { useNavigate } from "react-router-dom";
-import { Roles, Statuses } from "../../../Static";
+import { Roles, OrderStatuses } from "../../../Static";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../Storage/store";
 import { useUpdateOrderMutation } from "../../../APIs/orderApi";
@@ -16,13 +16,13 @@ function OrderSummary({ data, userInput }: OrderSummaryProps) {
   const [updateOrder] = useUpdateOrderMutation();
   const userData = useSelector((state: RootState) => state.userAuthStore);
   const nextStatus: any =
-    data.status! === Statuses.CONFIRMED
-      ? { color: "info", value: Statuses.PROCESSING }
-      : data.status! === Statuses.PROCESSING
-      ? { color: "warning", value: Statuses.READY }
-      : data.status! === Statuses.READY && {
+    data.status! === OrderStatuses.CONFIRMED
+      ? { color: "info", value: OrderStatuses.PROCESSING }
+      : data.status! === OrderStatuses.PROCESSING
+      ? { color: "warning", value: OrderStatuses.READY }
+      : data.status! === OrderStatuses.READY && {
           color: "success",
-          value: Statuses.COMPLETED,
+          value: OrderStatuses.COMPLETED,
         };
 
   const handleNextStatus = async () => {
@@ -38,7 +38,7 @@ function OrderSummary({ data, userInput }: OrderSummaryProps) {
     setIsLoading(true);
     await updateOrder({
       orderId: data.id,
-      status: Statuses.CANCELLED,
+      status: OrderStatuses.CANCELLED,
     });
     setIsLoading(false);
   };
@@ -100,8 +100,8 @@ function OrderSummary({ data, userInput }: OrderSummaryProps) {
 
             {userData.role === Roles.ADMIN && (
               <div className="d-flex">
-                {data.status !== Statuses.CANCELLED &&
-                  data.status !== Statuses.COMPLETED && (
+                {data.status !== OrderStatuses.CANCELLED &&
+                  data.status !== OrderStatuses.COMPLETED && (
                     <button
                       className="btn btn-danger mx-2"
                       onClick={handleCancel}

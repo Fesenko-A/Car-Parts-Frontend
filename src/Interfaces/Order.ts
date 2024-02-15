@@ -1,5 +1,6 @@
 import { OrderStatuses } from "../Static";
 import OrderDetails from "./OrderDetails";
+import PaymentMethod from "./PaymentMethod";
 
 export default interface Order {
   orderId?: number;
@@ -14,6 +15,7 @@ export default interface Order {
   status?: OrderStatuses;
   totalItems?: number;
   paymentMethodId?: number;
+  paymentMethod?: PaymentMethod;
   lastUpdate?: Date;
   orderDetails?: OrderDetails[];
 }

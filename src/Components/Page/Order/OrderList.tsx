@@ -15,12 +15,14 @@ function OrderList({ isLoading, orderData }: OrderListType) {
           <div className="p-2">
             <div className="row border">
               <div className="col-1">ID</div>
-              <div className="col-2">Name</div>
-              <div className="col-2">Phone</div>
+              <div className="col-1">Name</div>
+              <div className="col-1">Phone</div>
               <div className="col-1">Total</div>
               <div className="col-1">Items</div>
-              <div className="col-2">Date</div>
-              <div className="col-2">Status</div>
+              <div className="col-2">Order Date</div>
+              <div className="col-1">Status</div>
+              <div className="col-1">Payment</div>
+              <div className="col-2">Last Update</div>
               <div className="col-1"></div>
             </div>
             {orderData.map((orderItem: Order) => {
@@ -28,19 +30,25 @@ function OrderList({ isLoading, orderData }: OrderListType) {
               return (
                 <div className="row border" key={orderItem.orderId}>
                   <div className="col-1">{orderItem.orderId}</div>
-                  <div className="col-2">{orderItem.pickupName}</div>
-                  <div className="col-2">{orderItem.pickupPhoneNumber}</div>
+                  <div className="col-1">{orderItem.pickupName}</div>
+                  <div className="col-1">{orderItem.pickupPhoneNumber}</div>
                   <div className="col-1">
                     ${orderItem.orderTotal!.toFixed(2)}
                   </div>
                   <div className="col-1">{orderItem.totalItems}</div>
                   <div className="col-2">
-                    {new Date(orderItem.orderDate!).toLocaleDateString()}
+                    {new Date(orderItem.orderDate!).toLocaleString()}
                   </div>
-                  <div className="col-2">
+                  <div className="col-1">
                     <span className={`badge bg-${badgeColor}`}>
                       {orderItem.status}
                     </span>
+                  </div>
+                  <div className="col-1">
+                    {orderItem.paymentMethod?.description}
+                  </div>
+                  <div className="col-2">
+                    {new Date(orderItem.lastUpdate!).toLocaleString()}
                   </div>
                   <div className="col-1">
                     <button

@@ -13,7 +13,8 @@ import OrderConfirmed from "./Order/OrderConfirmed";
 import MyOrders from "./Order/MyOrders";
 import ProductUpsert from "./Product/ProductUpsert";
 import ProductInformation from "./ProductInformation/ProductInformation";
-import Payments from "./OnlinePayments";
+import AllOnlinePayments from "./OnlinePayments/AllOnlinePayments";
+import MyOnlinePayments from "./OnlinePayments/MyOnlinePayments";
 
 export {
   Login,
@@ -31,5 +32,6 @@ export {
   OrderDetails,
   ProductUpsert,
   ProductInformation,
-  Payments,
+  AllOnlinePayments,
+  MyOnlinePayments,
 };

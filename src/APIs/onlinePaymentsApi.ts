@@ -13,9 +13,18 @@ const onlinePaymentsApi = createApi({
   tagTypes: ["OnlinePayment"],
   endpoints: (builder) => ({
     getAllPayments: builder.query({
-      query: () => ({
+      query: ({ userId, status }) => ({
         url: "onlinePayment/getall",
+        params: {
+          ...(userId && { userId }),
+          ...(status && { status }),
+        },
       }),
+      transformResponse(apiResponse: { result: any }, meta: any) {
+        return {
+          apiResponse,
+        };
+      },
       providesTags: ["OnlinePayment"],
     }),
     getPaymentByOrderId: builder.query({

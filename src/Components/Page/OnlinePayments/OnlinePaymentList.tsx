@@ -1,23 +1,17 @@
-import React, { useEffect } from "react";
-import { withAdminAuth } from "../HOC";
-import { useGetAllPaymentsQuery } from "../APIs/onlinePaymentsApi";
-import { MainLoader } from "../Components/Page/Common";
-import { OnlinePayment } from "../Interfaces";
+import React from "react";
+import OnlinePaymentListType from "./OnlinePaymentListType";
+import { OnlinePayment } from "../../../Interfaces";
+import { MainLoader } from "../Common";
 
-function OnlinePayments() {
-  const { data, isLoading } = useGetAllPaymentsQuery(null);
-
+function OnlinePaymentList({ isLoading, paymentData }: OnlinePaymentListType) {
   return (
     <>
       {isLoading && <MainLoader />}
       {!isLoading && (
-        <div className="table p-5">
-          <div className="d-flex align-items-center justify-content-between">
-            <h1 className="text-primary">List of Online Payments</h1>
-          </div>
+        <div className="table px-5">
           <div className="p-2">
             <div className="row border">
-              <div className="col-1">Id</div>
+              <div className="col-1">ID</div>
               <div className="col-1">Order Id</div>
               <div className="col-3">Payment Id</div>
               <div className="col-2">Payment Status</div>
@@ -26,7 +20,7 @@ function OnlinePayments() {
               <div className="col-2">Last Update</div>
             </div>
 
-            {data.result.map((payment: OnlinePayment) => {
+            {paymentData.map((payment: OnlinePayment) => {
               return (
                 <div className="row border" key={payment.id}>
                   <div className="col-1">{payment.id}</div>
@@ -50,4 +44,4 @@ function OnlinePayments() {
   );
 }
 
-export default withAdminAuth(OnlinePayments);
+export default OnlinePaymentList;

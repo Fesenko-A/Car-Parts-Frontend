@@ -89,22 +89,40 @@ function Header() {
                   <li
                     style={{ cursor: "pointer" }}
                     className="dropdown-item"
-                    onClick={() => navigate("/payments")}
+                    onClick={() => navigate("/payments/myPayments")}
+                  >
+                    My Payments
+                  </li>
+                  <li
+                    style={{ cursor: "pointer" }}
+                    className="dropdown-item"
+                    onClick={() => navigate("/payments/allPayments")}
                   >
                     All Payments
                   </li>
                 </ul>
               </li>
             ) : (
-              <li className="nav-item">
-                <NavLink
-                  className="nav-link"
-                  aria-current="page"
-                  to="/order/myOrders"
-                >
-                  My orders
-                </NavLink>
-              </li>
+              <>
+                <li className="nav-item">
+                  <NavLink
+                    className="nav-link"
+                    aria-current="page"
+                    to="/order/myOrders"
+                  >
+                    My orders
+                  </NavLink>
+                </li>
+                <li className="nav-item">
+                  <NavLink
+                    className="nav-link"
+                    aria-current="page"
+                    to="/payments/myPayments"
+                  >
+                    My Payments
+                  </NavLink>
+                </li>
+              </>
             )}
 
             <li>

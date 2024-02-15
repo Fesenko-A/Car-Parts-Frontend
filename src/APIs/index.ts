@@ -6,6 +6,7 @@ import orderApi from "./orderApi";
 import brandApi from "./brandApi";
 import categoriesApi from "./categoriesApi";
 import specialTagsApi from "./specialTagsApi";
+import onlinePaymentsApi from "./onlinePaymentsApi";
 
 export {
   authApi,
@@ -16,4 +17,5 @@ export {
   brandApi,
   categoriesApi,
   specialTagsApi,
+  onlinePaymentsApi,
 };

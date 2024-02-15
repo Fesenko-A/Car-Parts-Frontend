@@ -17,7 +17,6 @@ const filterOptions = [
 function AllOrders() {
   const [filters, setFilters] = useState({ searchString: "", status: "" });
   const [orderData, setOrderData] = useState([]);
-  const [totalRecords, setTotalRecords] = useState(0);
   const [apiFilters, setApiFilters] = useState({
     searchString: "",
     status: "",

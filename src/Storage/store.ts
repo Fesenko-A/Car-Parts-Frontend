@@ -3,6 +3,7 @@ import {
   authApi,
   brandApi,
   categoriesApi,
+  onlinePaymentsApi,
   orderApi,
   paymentApi,
   productApi,
@@ -26,6 +27,7 @@ const store = configureStore({
     [brandApi.reducerPath]: brandApi.reducer,
     [categoriesApi.reducerPath]: categoriesApi.reducer,
     [specialTagsApi.reducerPath]: specialTagsApi.reducer,
+    [onlinePaymentsApi.reducerPath]: onlinePaymentsApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
@@ -36,7 +38,8 @@ const store = configureStore({
       .concat(shoppingCartApi.middleware)
       .concat(brandApi.middleware)
       .concat(categoriesApi.middleware)
-      .concat(specialTagsApi.middleware),
+      .concat(specialTagsApi.middleware)
+      .concat(onlinePaymentsApi.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

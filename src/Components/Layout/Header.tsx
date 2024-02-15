@@ -86,6 +86,13 @@ function Header() {
                   >
                     Product Information
                   </li>
+                  <li
+                    style={{ cursor: "pointer" }}
+                    className="dropdown-item"
+                    onClick={() => navigate("/payments")}
+                  >
+                    All Payments
+                  </li>
                 </ul>
               </li>
             ) : (

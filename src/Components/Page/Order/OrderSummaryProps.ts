@@ -9,6 +9,10 @@ export interface OrderSummaryProps {
     userId?: string;
     paymentId?: string;
     status?: OrderStatuses;
+    orderDate?: Date;
+    lastUpdate?: Date;
+    paymentMethod?: string;
+    paid?: boolean;
   };
   userInput: {
     name: string;

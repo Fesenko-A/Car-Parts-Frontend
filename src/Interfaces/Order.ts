@@ -17,5 +17,6 @@ export default interface Order {
   paymentMethodId?: number;
   paymentMethod?: PaymentMethod;
   lastUpdate?: Date;
+  paid?: boolean;
   orderDetails?: OrderDetails[];
 }

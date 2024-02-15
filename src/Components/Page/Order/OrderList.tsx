@@ -46,6 +46,8 @@ function OrderList({ isLoading, orderData }: OrderListType) {
                   </div>
                   <div className="col-1">
                     {orderItem.paymentMethod?.description}
+                    {" - "}
+                    {orderItem.paid ? "Paid" : "Unpaid"}
                   </div>
                   <div className="col-2">
                     {new Date(orderItem.lastUpdate!).toLocaleString()}

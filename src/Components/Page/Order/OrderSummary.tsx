@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { OrderSummaryProps } from "./OrderSummaryProps";
 import { CartItem } from "../../../Interfaces";
-import { getStatusColor } from "../../../Helper";
+import { getStatusColor, toastNotify } from "../../../Helper";
 import { useNavigate } from "react-router-dom";
 import { Roles, OrderStatuses } from "../../../Static";
 import { useSelector } from "react-redux";
@@ -27,10 +27,15 @@ function OrderSummary({ data, userInput }: OrderSummaryProps) {
 
   const handleNextStatus = async () => {
     setIsLoading(true);
-    await updateOrder({
-      orderId: data.id,
-      status: nextStatus.value,
-    });
+
+    if (data.status === OrderStatuses.READY && data.paid === false) {
+      toastNotify("Cannot complete this order because it is unpaid", "error");
+    } else {
+      await updateOrder({
+        orderId: data.id,
+        status: nextStatus.value,
+      });
+    }
     setIsLoading(false);
   };
 
@@ -60,6 +65,18 @@ function OrderSummary({ data, userInput }: OrderSummaryProps) {
             <div className="border py-3 px-2">Email: {userInput.email}</div>
             <div className="border py-3 px-2">
               Phone: {userInput.phoneNumber}
+            </div>
+            <div className="border py-3 px-2">
+              Order Date: {new Date(data.orderDate!).toLocaleString()}
+            </div>
+            <div className="border py-3 px-2">
+              Last Update: {new Date(data.lastUpdate!).toLocaleString()}
+            </div>
+            <div className="border py-3 px-2">
+              Payment Method: {data.paymentMethod}
+            </div>
+            <div className="border py-3 px-2">
+              Paid: {data.paid ? "Yes" : "No"}
             </div>
             <div className="border py-3 px-2">
               <h4 className="text-primary">Products</h4>

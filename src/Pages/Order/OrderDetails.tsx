@@ -19,6 +19,10 @@ function OrderDetails() {
       cartItems: data.result.orderDetails,
       cartTotal: data.result.orderTotal,
       status: data.result.status,
+      orderDate: data.result.orderDate,
+      lastUpdate: data.result.lastUpdate,
+      paymentMethod: data.result.paymentMethod.description,
+      paid: data.result.paid,
     };
   }
 

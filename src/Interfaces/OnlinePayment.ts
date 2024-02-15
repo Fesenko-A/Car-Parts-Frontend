@@ -9,6 +9,7 @@ export default interface OnlinePayment {
   paymentStatus?: PaymentStatuses;
   paymentAmount?: number;
   paymentDate?: Date;
+  userId?: string;
   lastUpdate?: Date;
   clientSecret?: string;
 }

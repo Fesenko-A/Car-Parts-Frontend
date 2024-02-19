@@ -1,27 +1,61 @@
 import React, { useEffect, useState } from "react";
-import { ApiResponse, CartItem, User } from "../../../Interfaces";
+import { CartItem, Order, User } from "../../../Interfaces";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../Storage/store";
 import { inputHelper } from "../../../Helper";
 import { MiniLoader } from "../Common";
-import { useInitiatePaymentMutation } from "../../../APIs/paymentApi";
 import { useNavigate } from "react-router-dom";
 
 function CartPickupDetails() {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const userData: User = useSelector((state: RootState) => state.userAuthStore);
   const shoppingCartFromStore: CartItem[] = useSelector(
     (state: RootState) => state.shoppingCartStore.cartItems ?? []
   );
-
-  const userData: User = useSelector((state: RootState) => state.userAuthStore);
-
-  let total = 0;
-  let totalItems = 0;
-
-  const initialUserData = {
+  const initialData = {
     name: userData.fullName,
     email: userData.email,
     phoneNumber: "",
+  };
+  const [userInput, setUserInput] = useState(initialData);
+  let total = 0;
+  let totalItems = 0;
+
+  const handleUserInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const tempData = inputHelper(e, userInput);
+    setUserInput(tempData);
+  };
+
+  const orderDetailsDTO: any = [];
+  shoppingCartFromStore.forEach((item: CartItem) => {
+    const tempOrderDetail: any = {};
+    tempOrderDetail["productId"] = item.product?.id;
+    tempOrderDetail["quantity"] = item.quantity;
+    tempOrderDetail["productName"] = item.product?.name;
+    tempOrderDetail["price"] = item.product?.price;
+    orderDetailsDTO.push(tempOrderDetail);
+    total += item.quantity! * item.product?.price!;
+    totalItems += item.quantity!;
+  });
+
+  const data: Order = {
+    pickupName: userInput.name,
+    pickupPhoneNumber: userInput.phoneNumber,
+    pickupEmail: userInput.email,
+    userId: userData.id,
+    orderTotal: total,
+    totalItems: totalItems,
+    orderDetails: orderDetailsDTO,
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+
+    navigate("/paymentMethod", {
+      state: { data: data },
+    });
   };
 
   useEffect(() => {
@@ -32,36 +66,9 @@ function CartPickupDetails() {
     });
   }, [userData]);
 
-  const navigate = useNavigate();
-  const [initiatePayment] = useInitiatePaymentMutation();
-
-  const [userInput, setUserInput] = useState(initialUserData);
-  const handleUserInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const tempData = inputHelper(e, userInput);
-    setUserInput(tempData);
-  };
-
-  shoppingCartFromStore?.map((cartItem: CartItem) => {
-    totalItems += cartItem.quantity ?? 0;
-    total += (cartItem.product?.price ?? 0) * (cartItem.quantity ?? 0);
-    return null;
-  });
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setLoading(true);
-
-    const { data }: ApiResponse = await initiatePayment(userData.id);
-    navigate("/payment", {
-      state: { apiResult: data?.result, userInput },
-    });
-  };
-
   return (
-    <div className="border pb-5 pt-3">
-      <h1 style={{ fontWeight: "300" }} className="text-center text-primary">
-        Pickup Details
-      </h1>
+    <div className="border pb-5 pt-3 rounded">
+      <h1 className="text-center text-primary">Pickup Details</h1>
       <hr />
       <form onSubmit={handleSubmit} className="col-10 mx-auto">
         <div className="form-group mt-3">
@@ -115,7 +122,7 @@ function CartPickupDetails() {
           className="btn btn-lg btn-primary form-control mt-3"
           disabled={loading}
         >
-          {loading ? <MiniLoader /> : "Looks Good? Place Order!"}
+          {loading ? <MiniLoader /> : "Proceed to Payment"}
         </button>
       </form>
     </div>

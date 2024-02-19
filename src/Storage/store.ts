@@ -5,7 +5,6 @@ import {
   categoriesApi,
   onlinePaymentsApi,
   orderApi,
-  paymentApi,
   productApi,
   shoppingCartApi,
   specialTagsApi,
@@ -22,7 +21,6 @@ const store = configureStore({
     [productApi.reducerPath]: productApi.reducer,
     [authApi.reducerPath]: authApi.reducer,
     [shoppingCartApi.reducerPath]: shoppingCartApi.reducer,
-    [paymentApi.reducerPath]: paymentApi.reducer,
     [orderApi.reducerPath]: orderApi.reducer,
     [brandApi.reducerPath]: brandApi.reducer,
     [categoriesApi.reducerPath]: categoriesApi.reducer,
@@ -34,7 +32,6 @@ const store = configureStore({
       .concat(productApi.middleware)
       .concat(authApi.middleware)
       .concat(orderApi.middleware)
-      .concat(paymentApi.middleware)
       .concat(shoppingCartApi.middleware)
       .concat(brandApi.middleware)
       .concat(categoriesApi.middleware)

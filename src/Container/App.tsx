@@ -18,6 +18,7 @@ import {
   ProductInformation,
   AllOnlinePayments,
   MyOnlinePayments,
+  PaymentMethod,
 } from "../Pages";
 import { Routes, Route } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -73,7 +74,7 @@ function App() {
           <Route
             path="/productDetails/:productId"
             element={<ProductDetails />}
-          ></Route>
+          />
           <Route path="/productInformation" element={<ProductInformation />} />
           <Route path="/payment" element={<Payment />} />
           <Route path="/order/myOrders" element={<MyOrders />} />
@@ -85,6 +86,7 @@ function App() {
           <Route path="/order/allOrders" element={<AllOrders />} />
           <Route path="/payments/allPayments" element={<AllOnlinePayments />} />
           <Route path="/payments/myPayments" element={<MyOnlinePayments />} />
+          <Route path="/paymentMethod" element={<PaymentMethod />} />
           <Route path="*" element={<NotFound />}></Route>
         </Routes>
       </div>

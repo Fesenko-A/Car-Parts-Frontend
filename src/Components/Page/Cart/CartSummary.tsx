@@ -47,7 +47,7 @@ function CartSummary() {
 
   return (
     <div className="container p-4 m-2">
-      <h4 className="text-center tet-success">Cart Summary</h4>
+      <h4 className="text-center text-primary">Cart Summary</h4>
       {shoppingCartFromStore.map((cartItem: CartItem, index: number) => (
         <div
           key={index}

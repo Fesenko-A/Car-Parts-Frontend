@@ -5,14 +5,16 @@ import {
   PaymentElement,
 } from "@stripe/react-stripe-js";
 import { toastNotify } from "../../../Helper";
-import { OrderSummaryProps } from "../Order/OrderSummaryProps";
 import { ApiResponse, CartItem } from "../../../Interfaces";
 import { useCreateOrderMutation } from "../../../APIs/orderApi";
+import { useLocation, useNavigate } from "react-router-dom";
 import { OrderStatuses } from "../../../Static";
-import { useNavigate } from "react-router-dom";
 
-const PaymentForm = ({ data, userInput }: OrderSummaryProps) => {
+const PaymentForm = () => {
   const navigate = useNavigate();
+  const {
+    state: { data },
+  } = useLocation();
   const stripe = useStripe();
   const elements = useElements();
   const [isProcessing, setIsProcessing] = useState(false);
@@ -38,42 +40,13 @@ const PaymentForm = ({ data, userInput }: OrderSummaryProps) => {
       toastNotify("An unexpected error occured", "error");
       setIsProcessing(false);
     } else {
-      let total = 0;
-      let totalItems = 0;
-
-      const orderDetailsDTO: any = [];
-      data.cartItems?.forEach((item: CartItem) => {
-        const tempOrderDetail: any = {};
-        tempOrderDetail["productId"] = item.product?.id;
-        tempOrderDetail["quantity"] = item.quantity;
-        tempOrderDetail["productName"] = item.product?.name;
-        tempOrderDetail["price"] = item.product?.price;
-        orderDetailsDTO.push(tempOrderDetail);
-        total += item.quantity! * item.product?.price!;
-        totalItems += item.quantity!;
-      });
-
-      const response: ApiResponse = await createOrder({
-        pickupName: userInput.name,
-        pickupPhoneNumber: userInput.phoneNumber,
-        pickupEmail: userInput.email,
-        userId: data.userId,
-        orderTotal: total,
-        paymentId: data.paymentId,
-        status:
-          result.paymentIntent.status === "succeeded"
-            ? OrderStatuses.CONFIRMED
-            : OrderStatuses.PENDING,
-        totalItems: totalItems,
-        orderDetails: orderDetailsDTO,
-      });
+      const response: ApiResponse = await createOrder(data);
+      data.status = OrderStatuses.PENDING;
 
       if (response) {
-        if (response.data?.result.status === OrderStatuses.CONFIRMED) {
-          navigate(`/order/orderConfirmed/${response.data.result.orderId}`);
-        } else {
-          navigate("/failed");
-        }
+        // navigate(`/order/orderConfirmed/${response.data!.result.orderId}`);
+      } else {
+        navigate("/failed");
       }
     }
     setIsProcessing(false);
@@ -93,5 +66,4 @@ const PaymentForm = ({ data, userInput }: OrderSummaryProps) => {
     </form>
   );
 };
-
 export default PaymentForm;

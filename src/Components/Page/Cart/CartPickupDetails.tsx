@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { CartItem, Order, User } from "../../../Interfaces";
+import { ApiResponse, CartItem, Order, User } from "../../../Interfaces";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../Storage/store";
 import { inputHelper } from "../../../Helper";
 import { MiniLoader } from "../Common";
 import { useNavigate } from "react-router-dom";
+import { OrderStatuses, PaymentMethods } from "../../../Static";
+import { useCreateOrderMutation } from "../../../APIs/orderApi";
 
 function CartPickupDetails() {
   const navigate = useNavigate();
+  const [createOrder] = useCreateOrderMutation();
   const [loading, setLoading] = useState(false);
   const userData: User = useSelector((state: RootState) => state.userAuthStore);
   const shoppingCartFromStore: CartItem[] = useSelector(
@@ -17,12 +20,14 @@ function CartPickupDetails() {
     name: userData.fullName,
     email: userData.email,
     phoneNumber: "",
+    paymentMethodId: 1,
   };
   const [userInput, setUserInput] = useState(initialData);
+
   let total = 0;
   let totalItems = 0;
 
-  const handleUserInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleUserInput = (e: any) => {
     const tempData = inputHelper(e, userInput);
     setUserInput(tempData);
   };
@@ -45,17 +50,29 @@ function CartPickupDetails() {
     pickupEmail: userInput.email,
     userId: userData.id,
     orderTotal: total,
+    status: OrderStatuses.CONFIRMED,
     totalItems: totalItems,
     orderDetails: orderDetailsDTO,
+    paymentMethodId: Number(userInput.paymentMethodId),
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
 
-    navigate("/paymentMethod", {
-      state: { data: data },
-    });
+    if (data.paymentMethodId === 1) {
+      const response: ApiResponse = await createOrder(data);
+
+      if (response) {
+        navigate(`/order/orderConfirmed/${response.data!.result.orderId}`);
+      } else {
+        navigate("/failed");
+      }
+    } else {
+      navigate("/payment", {
+        state: { apiResult: data, userInput: userInput },
+      });
+    }
   };
 
   useEffect(() => {
@@ -63,6 +80,7 @@ function CartPickupDetails() {
       name: userData.fullName,
       email: userData.email,
       phoneNumber: "",
+      paymentMethodId: userInput.paymentMethodId,
     });
   }, [userData]);
 
@@ -108,6 +126,19 @@ function CartPickupDetails() {
             onChange={handleUserInput}
             required
           />
+        </div>
+
+        <div className="form-group mt-3">
+          Payment Method
+          <select
+            className="form-control"
+            name="paymentMethodId"
+            value={userInput.paymentMethodId}
+            onChange={handleUserInput}
+          >
+            <option value={1}>{PaymentMethods.CASH}</option>
+            <option value={2}>{PaymentMethods.ONLINE}</option>
+          </select>
         </div>
 
         <div className="form-group mt-3">

@@ -15,7 +15,6 @@ import ProductUpsert from "./Product/ProductUpsert";
 import ProductInformation from "./ProductInformation/ProductInformation";
 import AllOnlinePayments from "./OnlinePayments/AllOnlinePayments";
 import MyOnlinePayments from "./OnlinePayments/MyOnlinePayments";
-import PaymentMethod from "./PaymentMethod";
 
 export {
   Login,
@@ -35,5 +34,4 @@ export {
   ProductInformation,
   AllOnlinePayments,
   MyOnlinePayments,
-  PaymentMethod,
 };

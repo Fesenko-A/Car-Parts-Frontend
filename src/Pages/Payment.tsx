@@ -7,13 +7,13 @@ import { OrderSummary } from "../Components/Page/Order";
 
 function Payment() {
   const {
-    state: { apiResult, userInput },
+    state: { apiResult, userInput, clientSecret },
   } = useLocation();
 
   const stripePromise = loadStripe(
     "pk_test_51OVYpoCBJO48XwYLSsNgcWVvG6Ub2rNmAnODV9NPn6ehINDKpn9TwghaC8tRE8OqCOUWx9Il9alyK2PHKzhlfdrA00qfdMTCBV"
   );
-  const options = { clientSecret: apiResult.clientSecret };
+  const options = { clientSecret: clientSecret };
 
   return (
     <Elements stripe={stripePromise} options={options}>
@@ -25,7 +25,7 @@ function Payment() {
           <div className="col-md-4 offset-md-1">
             <h3 className="text-primary">Payment</h3>
             <div className="mt-5">
-              <PaymentForm data={apiResult} userInput={userInput} />
+              <PaymentForm />
             </div>
           </div>
         </div>

@@ -5,20 +5,18 @@ import {
   PaymentElement,
 } from "@stripe/react-stripe-js";
 import { toastNotify } from "../../../Helper";
-import { ApiResponse, CartItem } from "../../../Interfaces";
+import { ApiResponse } from "../../../Interfaces";
 import { useCreateOrderMutation } from "../../../APIs/orderApi";
-import { useLocation, useNavigate } from "react-router-dom";
-import { OrderStatuses } from "../../../Static";
+import { useNavigate } from "react-router-dom";
+import { useCreatePaymentMutation } from "../../../APIs/onlinePaymentsApi";
 
-const PaymentForm = () => {
+const PaymentForm = ({ data, userInput }: any) => {
   const navigate = useNavigate();
-  const {
-    state: { data },
-  } = useLocation();
   const stripe = useStripe();
   const elements = useElements();
   const [isProcessing, setIsProcessing] = useState(false);
   const [createOrder] = useCreateOrderMutation();
+  const [createPayment] = useCreatePaymentMutation();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -39,12 +37,30 @@ const PaymentForm = () => {
     if (result.error) {
       toastNotify("An unexpected error occured", "error");
       setIsProcessing(false);
+      console.log(result);
     } else {
-      const response: ApiResponse = await createOrder(data);
-      data.status = OrderStatuses.PENDING;
+      const paymentId = result.paymentIntent?.id;
+      const dataToPost = {
+        pickupName: userInput.name,
+        pickupPhoneNumber: userInput.phoneNumber,
+        pickupEmail: userInput.email,
+        userId: data.userId,
+        orderTotal: data.orderTotal,
+        paymentMethodId: data.paymentMethodId,
+        paymentId: data.paymentId,
+        status: data.status,
+        totalItems: data.totalItems,
+        orderDetails: data.orderDetails,
+      };
+      const response: ApiResponse = await createOrder(dataToPost);
 
       if (response) {
-        // navigate(`/order/orderConfirmed/${response.data!.result.orderId}`);
+        const orderId = response.data!.result.orderId;
+        const payment = await createPayment({ orderId, paymentId });
+
+        if (payment) {
+          navigate(`/order/orderConfirmed/${orderId}`);
+        }
       } else {
         navigate("/failed");
       }

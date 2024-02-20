@@ -33,10 +33,21 @@ const onlinePaymentsApi = createApi({
       }),
       providesTags: ["OnlinePayment"],
     }),
-    createPayment: builder.mutation({
-      query: (id) => ({
-        url: `onlinePayment/create/${id}`,
+    createIntent: builder.mutation({
+      query: (userId) => ({
+        url: `onlinePayment/createIntent/${userId}`,
         method: "POST",
+      }),
+      invalidatesTags: ["OnlinePayment"],
+    }),
+    createPayment: builder.mutation({
+      query: ({ orderId, paymentId }) => ({
+        url: `onlinePayment/create/${orderId}/${paymentId}`,
+        method: "POST",
+        params: {
+          ...(orderId && { orderId }),
+          ...(paymentId && { paymentId }),
+        },
       }),
       invalidatesTags: ["OnlinePayment"],
     }),
@@ -54,6 +65,7 @@ export const {
   useGetAllPaymentsQuery,
   useGetPaymentByOrderIdQuery,
   useCreatePaymentMutation,
+  useCreateIntentMutation,
   useCancelPaymentMutation,
 } = onlinePaymentsApi;
 export default onlinePaymentsApi;

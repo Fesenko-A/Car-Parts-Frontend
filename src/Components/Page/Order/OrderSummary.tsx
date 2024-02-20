@@ -53,7 +53,6 @@ function OrderSummary({ data, userInput }: OrderSummaryProps) {
       {loading && <MainLoader />}
       {!loading && (
         <>
-          &nbsp;
           <div className="d-flex justify-content-between align-items-center">
             <h3 className="text-primary">Order Summary</h3>
             <span className={`btn btn-${badgeTypeColor} fs-6 active`}>

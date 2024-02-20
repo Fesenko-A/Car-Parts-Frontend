@@ -7,10 +7,12 @@ import { MiniLoader } from "../Common";
 import { useNavigate } from "react-router-dom";
 import { OrderStatuses, PaymentMethods } from "../../../Static";
 import { useCreateOrderMutation } from "../../../APIs/orderApi";
+import { useCreateIntentMutation } from "../../../APIs/onlinePaymentsApi";
 
 function CartPickupDetails() {
   const navigate = useNavigate();
   const [createOrder] = useCreateOrderMutation();
+  const [createIntent] = useCreateIntentMutation();
   const [loading, setLoading] = useState(false);
   const userData: User = useSelector((state: RootState) => state.userAuthStore);
   const shoppingCartFromStore: CartItem[] = useSelector(
@@ -69,9 +71,17 @@ function CartPickupDetails() {
         navigate("/failed");
       }
     } else {
-      navigate("/payment", {
-        state: { apiResult: data, userInput: userInput },
-      });
+      const response: ApiResponse = await createIntent(userData.id);
+
+      if (response) {
+        navigate("/payment", {
+          state: {
+            apiResult: data,
+            userInput: userInput,
+            clientSecret: response.data!.result.clientSecret,
+          },
+        });
+      }
     }
   };
 

@@ -1,3 +1,4 @@
 import PaymentForm from "./PaymentForm";
+import PaymentSummary from "./PaymentSummary";
 
-export { PaymentForm };
+export { PaymentForm, PaymentSummary };

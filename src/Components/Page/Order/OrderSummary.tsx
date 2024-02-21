@@ -8,7 +8,10 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../Storage/store";
 import { useUpdateOrderMutation } from "../../../APIs/orderApi";
 import { MainLoader } from "../Common";
-import { useCancelPaymentMutation } from "../../../APIs/onlinePaymentsApi";
+import {
+  useCancelPaymentMutation,
+  useCreateIntentByOrderMutation,
+} from "../../../APIs/onlinePaymentsApi";
 
 function OrderSummary({ data, userInput }: OrderSummaryProps) {
   const badgeTypeColor = getStatusColor(data.status!);
@@ -16,6 +19,7 @@ function OrderSummary({ data, userInput }: OrderSummaryProps) {
   const navigate = useNavigate();
   const [loading, setIsLoading] = useState(false);
   const [updateOrder] = useUpdateOrderMutation();
+  const [createIntentByOrder] = useCreateIntentByOrderMutation();
   const [cancelPayment] = useCancelPaymentMutation();
   const userData = useSelector((state: RootState) => state.userAuthStore);
   const nextStatus: any =
@@ -75,6 +79,24 @@ function OrderSummary({ data, userInput }: OrderSummaryProps) {
     setIsLoading(false);
   };
 
+  const handlePayOnline = async () => {
+    setIsLoading(true);
+
+    const response: ApiResponse = await createIntentByOrder(data.id);
+
+    if (response) {
+      navigate("/payment", {
+        state: {
+          apiResult: data,
+          userInput: userInput,
+          clientSecret: response.data!.result.clientSecret,
+        },
+      });
+    }
+
+    setIsLoading(false);
+  };
+
   return (
     <div>
       {loading && <MainLoader />}
@@ -120,7 +142,7 @@ function OrderSummary({ data, userInput }: OrderSummaryProps) {
             </div>
             <div className="border py-3 px-2">
               <h4 className="text-primary">Products</h4>
-              {data.cartItems?.map((cartItem: CartItem, index: number) => {
+              {data.orderDetails?.map((cartItem: CartItem, index: number) => {
                 return (
                   <div className="d-flex" key={index}>
                     <div className="d-flex w-100 justify-content-between">
@@ -144,7 +166,7 @@ function OrderSummary({ data, userInput }: OrderSummaryProps) {
                 <div>
                   <hr />
                   <h4 className="text-primary" style={{ textAlign: "right" }}>
-                    ${data.cartTotal?.toFixed(2)}
+                    ${data.orderTotal?.toFixed(2)}
                   </h4>
                 </div>
               </div>
@@ -154,6 +176,16 @@ function OrderSummary({ data, userInput }: OrderSummaryProps) {
             <button className="btn btn-secondary" onClick={() => navigate(-1)}>
               Back to Orders
             </button>
+
+            {data.paymentMethod === PaymentMethods.CASH &&
+            data.paid === false &&
+            data.userId === userData.id ? (
+              <button className="btn btn-primary" onClick={handlePayOnline}>
+                Pay Online <i className="bi bi-credit-card"></i>
+              </button>
+            ) : (
+              ""
+            )}
 
             {userData.role === Roles.ADMIN && (
               <div className="d-flex">

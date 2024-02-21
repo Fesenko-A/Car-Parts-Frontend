@@ -6,7 +6,7 @@ import { OrderSummary } from "../../Components/Page/Order";
 function OrderDetails() {
   const { id } = useParams();
   const { data, isLoading } = useGetOrderDetailsQuery(id);
-  let userInput, orderDetails;
+  let userInput, details;
 
   if (!isLoading && data?.result) {
     userInput = {
@@ -14,10 +14,11 @@ function OrderDetails() {
       email: data.result.pickupEmail,
       phoneNumber: data.result.pickupPhoneNumber,
     };
-    orderDetails = {
+    details = {
       id: data.result.orderId,
-      cartItems: data.result.orderDetails,
-      cartTotal: data.result.orderTotal,
+      userId: data.result.userId,
+      orderDetails: data.result.orderDetails,
+      orderTotal: data.result.orderTotal,
       status: data.result.status,
       orderDate: data.result.orderDate,
       lastUpdate: data.result.lastUpdate,
@@ -31,8 +32,8 @@ function OrderDetails() {
       className="container my-5 mx-auto p-5 w-100"
       style={{ maxWidth: "750px" }}
     >
-      {!isLoading && orderDetails && userInput && (
-        <OrderSummary data={orderDetails} userInput={userInput} />
+      {!isLoading && details && userInput && (
+        <OrderSummary data={details} userInput={userInput} />
       )}
     </div>
   );

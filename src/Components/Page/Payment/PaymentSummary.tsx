@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { MainLoader } from "../Common";
-import { PaymentMethods } from "../../../Static";
 
 function PaymentSummary({ data, userInput }: any) {
   const [loading] = useState(false);
@@ -18,12 +17,6 @@ function PaymentSummary({ data, userInput }: any) {
             <div className="border py-3 px-2">Email: {userInput.email}</div>
             <div className="border py-3 px-2">
               Phone: {userInput.phoneNumber}
-            </div>
-            <div className="border py-3 px-2">
-              Payment Method:{" "}
-              {data.paymentMethodId === 2
-                ? PaymentMethods.ONLINE
-                : PaymentMethods.CASH}
             </div>
             <div className="border py-3 px-2">
               <h4 className="text-primary">Products</h4>

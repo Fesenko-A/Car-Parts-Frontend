@@ -4,8 +4,8 @@ import { OrderStatuses } from "../../../Static";
 export interface OrderSummaryProps {
   data: {
     id?: number;
-    cartItems?: ShoppingCart[];
-    cartTotal?: number;
+    orderDetails?: ShoppingCart[];
+    orderTotal?: number;
     userId?: string;
     paymentId?: string;
     status?: OrderStatuses;

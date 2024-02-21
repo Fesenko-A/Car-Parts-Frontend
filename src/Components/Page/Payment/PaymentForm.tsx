@@ -6,7 +6,10 @@ import {
 } from "@stripe/react-stripe-js";
 import { toastNotify } from "../../../Helper";
 import { ApiResponse } from "../../../Interfaces";
-import { useCreateOrderMutation } from "../../../APIs/orderApi";
+import {
+  useCreateOrderMutation,
+  useUpdateOrderMutation,
+} from "../../../APIs/orderApi";
 import { useNavigate } from "react-router-dom";
 import { useCreatePaymentMutation } from "../../../APIs/onlinePaymentsApi";
 
@@ -17,6 +20,7 @@ const PaymentForm = ({ data, userInput }: any) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [createOrder] = useCreateOrderMutation();
   const [createPayment] = useCreatePaymentMutation();
+  const [updateOrder] = useUpdateOrderMutation();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -37,7 +41,18 @@ const PaymentForm = ({ data, userInput }: any) => {
     if (result.error) {
       toastNotify("An unexpected error occured", "error");
       setIsProcessing(false);
-      console.log(result);
+    } else if (data.id !== null) {
+      const orderId = data.id;
+      const paymentId = result.paymentIntent.id;
+      await updateOrder({
+        orderId: orderId,
+        paymentMethodId: 2,
+        paid: true,
+      });
+      await createPayment({ orderId, paymentId });
+
+      navigate(`/order/orderDetails/${orderId}`);
+      toastNotify("Order paid online successfuly");
     } else {
       const paymentId = result.paymentIntent?.id;
       const dataToPost = {

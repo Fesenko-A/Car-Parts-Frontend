@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import { OrderSummaryProps } from "./OrderSummaryProps";
-import { CartItem } from "../../../Interfaces";
+import { ApiResponse, CartItem } from "../../../Interfaces";
 import { getPaidColor, getStatusColor, toastNotify } from "../../../Helper";
 import { useNavigate } from "react-router-dom";
-import { Roles, OrderStatuses } from "../../../Static";
+import { Roles, OrderStatuses, PaymentMethods } from "../../../Static";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../Storage/store";
 import { useUpdateOrderMutation } from "../../../APIs/orderApi";
 import { MainLoader } from "../Common";
+import { useCancelPaymentMutation } from "../../../APIs/onlinePaymentsApi";
 
 function OrderSummary({ data, userInput }: OrderSummaryProps) {
   const badgeTypeColor = getStatusColor(data.status!);
@@ -15,6 +16,7 @@ function OrderSummary({ data, userInput }: OrderSummaryProps) {
   const navigate = useNavigate();
   const [loading, setIsLoading] = useState(false);
   const [updateOrder] = useUpdateOrderMutation();
+  const [cancelPayment] = useCancelPaymentMutation();
   const userData = useSelector((state: RootState) => state.userAuthStore);
   const nextStatus: any =
     data.status! === OrderStatuses.CONFIRMED
@@ -43,10 +45,22 @@ function OrderSummary({ data, userInput }: OrderSummaryProps) {
 
   const handleCancel = async () => {
     setIsLoading(true);
+
+    if (data.paymentMethod === PaymentMethods.ONLINE) {
+      const response: ApiResponse = await cancelPayment(data.id);
+      if (response) {
+        toastNotify("Refund created");
+        toastNotify("Money will be returned within 5-10 days", "info");
+      } else {
+        toastNotify("Error while creating refund", "error");
+      }
+    }
+
     await updateOrder({
       orderId: data.id,
       status: OrderStatuses.CANCELLED,
     });
+
     setIsLoading(false);
   };
 
@@ -126,7 +140,9 @@ function OrderSummary({ data, userInput }: OrderSummaryProps) {
                       className="btn btn-danger me-1"
                       onClick={handleCancel}
                     >
-                      Cancel
+                      {data.paymentMethod === PaymentMethods.ONLINE
+                        ? "Cancel and Refund"
+                        : "Cancel"}
                     </button>
                   )}
                 <button

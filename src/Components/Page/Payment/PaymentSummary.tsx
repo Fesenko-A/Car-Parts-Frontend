@@ -3,7 +3,7 @@ import { MainLoader } from "../Common";
 import { PaymentMethods } from "../../../Static";
 
 function PaymentSummary({ data, userInput }: any) {
-  const [loading, setIsLoading] = useState(false);
+  const [loading] = useState(false);
 
   return (
     <div>
@@ -21,7 +21,7 @@ function PaymentSummary({ data, userInput }: any) {
             </div>
             <div className="border py-3 px-2">
               Payment Method:{" "}
-              {data.paymentMethodId == 2
+              {data.paymentMethodId === 2
                 ? PaymentMethods.ONLINE
                 : PaymentMethods.CASH}
             </div>

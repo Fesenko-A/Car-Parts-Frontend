@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { OrderSummaryProps } from "./OrderSummaryProps";
 import { CartItem } from "../../../Interfaces";
-import { getStatusColor, toastNotify } from "../../../Helper";
+import { getPaidColor, getStatusColor, toastNotify } from "../../../Helper";
 import { useNavigate } from "react-router-dom";
 import { Roles, OrderStatuses } from "../../../Static";
 import { useSelector } from "react-redux";
@@ -11,6 +11,7 @@ import { MainLoader } from "../Common";
 
 function OrderSummary({ data, userInput }: OrderSummaryProps) {
   const badgeTypeColor = getStatusColor(data.status!);
+  const paymentColor = getPaidColor(data.paid!);
   const navigate = useNavigate();
   const [loading, setIsLoading] = useState(false);
   const [updateOrder] = useUpdateOrderMutation();
@@ -36,6 +37,7 @@ function OrderSummary({ data, userInput }: OrderSummaryProps) {
         status: nextStatus.value,
       });
     }
+
     setIsLoading(false);
   };
 
@@ -55,9 +57,14 @@ function OrderSummary({ data, userInput }: OrderSummaryProps) {
         <>
           <div className="d-flex justify-content-between align-items-center">
             <h3 className="text-primary">Order Summary</h3>
-            <span className={`btn btn-${badgeTypeColor} fs-6 active`}>
-              {data.status}
-            </span>
+            <div>
+              <span className={`btn btn-${paymentColor} fs-6 active me-1`}>
+                {data.paid ? "Paid" : "Unpaid"}
+              </span>
+              <span className={`btn btn-${badgeTypeColor} fs-6 active`}>
+                {data.status}
+              </span>
+            </div>
           </div>
           <div className="mt-3">
             <div className="border py-3 px-2">Name: {userInput.name}</div>
@@ -73,9 +80,6 @@ function OrderSummary({ data, userInput }: OrderSummaryProps) {
             </div>
             <div className="border py-3 px-2">
               Payment Method: {data.paymentMethod}
-            </div>
-            <div className="border py-3 px-2">
-              Paid: {data.paid ? "Yes" : "No"}
             </div>
             <div className="border py-3 px-2">
               <h4 className="text-primary">Products</h4>
@@ -119,7 +123,7 @@ function OrderSummary({ data, userInput }: OrderSummaryProps) {
                 {data.status !== OrderStatuses.CANCELLED &&
                   data.status !== OrderStatuses.COMPLETED && (
                     <button
-                      className="btn btn-danger mx-2"
+                      className="btn btn-danger me-1"
                       onClick={handleCancel}
                     >
                       Cancel

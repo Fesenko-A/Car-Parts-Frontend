@@ -64,6 +64,17 @@ function OrderSummary({ data, userInput }: OrderSummaryProps) {
     setIsLoading(false);
   };
 
+  const handlePaid = async () => {
+    setIsLoading(true);
+
+    await updateOrder({
+      orderId: data.id,
+      paid: true,
+    });
+
+    setIsLoading(false);
+  };
+
   return (
     <div>
       {loading && <MainLoader />}
@@ -94,6 +105,18 @@ function OrderSummary({ data, userInput }: OrderSummaryProps) {
             </div>
             <div className="border py-3 px-2">
               Payment Method: {data.paymentMethod}
+              {userData.role === Roles.ADMIN &&
+              data.paymentMethod === PaymentMethods.CASH &&
+              data.paid === false ? (
+                <button
+                  className="btn btn-success btn-sm ms-1"
+                  onClick={handlePaid}
+                >
+                  Click if Paid
+                </button>
+              ) : (
+                ""
+              )}
             </div>
             <div className="border py-3 px-2">
               <h4 className="text-primary">Products</h4>

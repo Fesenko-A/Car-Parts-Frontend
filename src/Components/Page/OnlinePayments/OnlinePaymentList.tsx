@@ -2,6 +2,7 @@ import React from "react";
 import OnlinePaymentListType from "./OnlinePaymentListType";
 import { OnlinePayment } from "../../../Interfaces";
 import { MainLoader } from "../Common";
+import { getPaymentStatusColor } from "../../../Helper";
 
 function OnlinePaymentList({ isLoading, paymentData }: OnlinePaymentListType) {
   return (
@@ -21,12 +22,18 @@ function OnlinePaymentList({ isLoading, paymentData }: OnlinePaymentListType) {
             </div>
 
             {paymentData.map((payment: OnlinePayment) => {
+              const statusBadge = getPaymentStatusColor(payment.paymentStatus!);
+
               return (
                 <div className="row border" key={payment.id}>
                   <div className="col-1">{payment.id}</div>
                   <div className="col-1">{payment.orderId}</div>
                   <div className="col-3">{payment.paymentId}</div>
-                  <div className="col-2">{payment.paymentStatus}</div>
+                  <div className="col-2">
+                    <span className={`badge bg-${statusBadge}`}>
+                      {payment.paymentStatus}
+                    </span>
+                  </div>
                   <div className="col-1">${payment.paymentAmount}</div>
                   <div className="col-2">
                     {new Date(payment.paymentDate!).toLocaleString()}

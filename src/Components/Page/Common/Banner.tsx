@@ -16,7 +16,7 @@ function Banner() {
     <div className="custom-banner">
       <div
         className="m-auto d-flex align-items-center"
-        style={{ width: "400px", height: "35vh" }}
+        style={{ width: "60vh", height: "35vh" }}
       >
         <div className="d-flex align-items-center" style={{ width: "100%" }}>
           <input

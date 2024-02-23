@@ -10,7 +10,7 @@ import { SortingTypes } from "../../../Static";
 
 function ProductListHome() {
   const [products, setProducts] = useState<Product[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [selectedCategory, setSelectedCategory] = useState("All Categories");
   const { data, isLoading } = useGetAllProductsQuery(null);
   const [categoryList, setCategoryList] = useState([""]);
   const dispatch = useDispatch();
@@ -42,7 +42,7 @@ function ProductListHome() {
     if (!isLoading) {
       dispatch(setProduct(data.result));
       setProducts(data.result);
-      const tempCategoryList = ["All"];
+      const tempCategoryList = ["All Categories"];
       data.result.forEach((item: Product) => {
         if (tempCategoryList.indexOf(item.category.name) === -1) {
           tempCategoryList.push(item.category.name);
@@ -54,14 +54,14 @@ function ProductListHome() {
   }, [isLoading]);
 
   const handleCategoryClick = (i: number) => {
-    const buttons = document.querySelectorAll(".custom-buttons");
+    const buttons = document.querySelectorAll(".custom-categories");
     let localCategory;
 
     buttons.forEach((button, index) => {
       if (index === i) {
         button.classList.add("active");
         if (index === 0) {
-          localCategory = "All";
+          localCategory = "All Categories";
         } else {
           localCategory = categoryList[index];
         }
@@ -91,7 +91,7 @@ function ProductListHome() {
     search: string
   ) => {
     let tempArray =
-      category === "All"
+      category === "All Categories"
         ? [...data.result]
         : data.result.filter(
             (item: Product) =>
@@ -142,33 +142,48 @@ function ProductListHome() {
     <div className="row container">
       <div className="my-3">
         <ul className="nav w-100 d-flex justify-content-center">
-          {categoryList.map((categoryName, index) => (
-            <li className="nav-item" key={index}>
-              <button
-                className={`nav-link p-0 pb-2 custom-buttons fs-5 ${
-                  index === 0 && "active"
-                }`}
-                onClick={() => handleCategoryClick(index)}
-              >
-                {categoryName}
-              </button>
-            </li>
-          ))}
-          <li className="nav-item dropdown" style={{ marginLeft: "auto" }}>
+          <li className="nav-item dropdown">
             <div
-              className="nav-link dropdown-toggle text-dark fs-6 border rounded"
+              className="d-flex nav-link text-dark fs-6 border rounded"
               role="button"
               data-bs-toggle="dropdown"
               aria-expanded="false"
+              style={{ width: "21vh" }}
             >
-              {sortName}
+              <span>{selectedCategory}</span>
+              <i className="bi bi-caret-down ms-auto" />
+            </div>
+            <ul className="dropdown-menu">
+              {categoryList.map((categoryName, index) => (
+                <li
+                  className="dropdown-item custom-categories"
+                  key={index}
+                  onClick={() => handleCategoryClick(index)}
+                  style={{ width: "21vh" }}
+                >
+                  {categoryName}
+                </li>
+              ))}
+            </ul>
+          </li>
+          <li className="nav-item dropdown" style={{ marginLeft: "auto" }}>
+            <div
+              className="d-flex nav-link text-dark fs-6 border rounded"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+              style={{ width: "16vh" }}
+            >
+              <span>{sortName}</span>
+              <i className="bi bi-caret-down ms-auto" />
             </div>
             <ul className="dropdown-menu">
               {sortOptions.map((sortType, index) => (
                 <li
                   key={index}
-                  className="dropdown-item rounded"
+                  className="dropdown-item"
                   onClick={() => handleSortClick(index)}
+                  style={{ width: "16vh" }}
                 >
                   {sortType}
                 </li>

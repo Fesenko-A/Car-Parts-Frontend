@@ -163,7 +163,7 @@ function CartPickupDetails() {
           className="btn btn-lg btn-primary form-control mt-3"
           disabled={loading}
         >
-          {loading ? <MiniLoader /> : "Proceed to Payment"}
+          {loading ? <MiniLoader /> : "Submit Order"}
         </button>
       </form>
     </div>

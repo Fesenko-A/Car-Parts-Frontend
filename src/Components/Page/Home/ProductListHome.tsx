@@ -56,16 +56,20 @@ function ProductListHome() {
       setProducts(data.result);
 
       const tempCategoryList = ["All Categories"];
-      categoriesData.result.map((category: any) =>
-        tempCategoryList.push(category.name)
-      );
-      setCategoryList(tempCategoryList);
+      if (categoriesData) {
+        categoriesData.result.map((category: any) =>
+          tempCategoryList.push(category.name)
+        );
+        setCategoryList(tempCategoryList);
+      }
 
       const tempBrandList = ["All Brands"];
-      brandsData.result.map((brand: any) => tempBrandList.push(brand.name));
-      setBrandList(tempBrandList);
+      if (brandsData) {
+        brandsData.result.map((brand: any) => tempBrandList.push(brand.name));
+        setBrandList(tempBrandList);
+      }
     }
-  }, [isLoading, categoriesLoading, brandsLoading]);
+  }, [data, categoriesData, brandsData]);
 
   const handleCategoryClick = (name: string) => {
     setSelectedCategory(name);

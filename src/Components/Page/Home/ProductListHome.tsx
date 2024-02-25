@@ -1,18 +1,30 @@
 import React, { useEffect, useState } from "react";
 import { Product } from "../../../Interfaces";
-import ProductCard from "./ProductCard";
+import { ProductCard } from "./";
 import { useGetAllProductsQuery } from "../../../APIs/productApi";
 import { MainLoader } from "../Common";
 import { RootState } from "../../../Storage/store";
 import { useDispatch, useSelector } from "react-redux";
 import { setProduct } from "../../../Storage/productSlice";
 import { SortingTypes } from "../../../Static";
+import { useGetAllCategoriesQuery } from "../../../APIs/categoriesApi";
+import { useGetAllBrandsQuery } from "../../../APIs/brandApi";
 
 function ProductListHome() {
   const [products, setProducts] = useState<Product[]>([]);
+
   const [selectedCategory, setSelectedCategory] = useState("All Categories");
+  const [selectedBrand, setSelectedBrand] = useState("All Brands");
+
   const { data, isLoading } = useGetAllProductsQuery(null);
+  const { data: categoriesData, isLoading: categoriesLoading } =
+    useGetAllCategoriesQuery(null);
+  const { data: brandsData, isLoading: brandsLoading } =
+    useGetAllBrandsQuery(null);
+
   const [categoryList, setCategoryList] = useState([""]);
+  const [brandList, setBrandList] = useState([""]);
+
   const dispatch = useDispatch();
   const [sortName, setSortName] = useState(SortingTypes.NAME_A_Z);
 
@@ -42,37 +54,29 @@ function ProductListHome() {
     if (!isLoading) {
       dispatch(setProduct(data.result));
       setProducts(data.result);
+
       const tempCategoryList = ["All Categories"];
-      data.result.forEach((item: Product) => {
-        if (tempCategoryList.indexOf(item.category.name) === -1) {
-          tempCategoryList.push(item.category.name);
-        }
-      });
-
+      categoriesData.result.map((category: any) =>
+        tempCategoryList.push(category.name)
+      );
       setCategoryList(tempCategoryList);
+
+      const tempBrandList = ["All Brands"];
+      brandsData.result.map((brand: any) => tempBrandList.push(brand.name));
+      setBrandList(tempBrandList);
     }
-  }, [isLoading]);
+  }, [isLoading, categoriesLoading, brandsLoading]);
 
-  const handleCategoryClick = (i: number) => {
-    const buttons = document.querySelectorAll(".custom-categories");
-    let localCategory;
+  const handleCategoryClick = (name: string) => {
+    setSelectedCategory(name);
+    const tempArray = handleFilters(sortName, name, searchValue);
+    setProducts(tempArray);
+  };
 
-    buttons.forEach((button, index) => {
-      if (index === i) {
-        button.classList.add("active");
-        if (index === 0) {
-          localCategory = "All Categories";
-        } else {
-          localCategory = categoryList[index];
-        }
-
-        setSelectedCategory(localCategory);
-        const tempArray = handleFilters(sortName, localCategory, searchValue);
-        setProducts(tempArray);
-      } else {
-        button.classList.remove("active");
-      }
-    });
+  const handleBrandClick = (name: string) => {
+    setSelectedBrand(name);
+    const tempArray = handleFilters(sortName, selectedCategory, searchValue);
+    setProducts(tempArray);
   };
 
   const handleSortClick = (i: number) => {
@@ -156,12 +160,36 @@ function ProductListHome() {
             <ul className="dropdown-menu">
               {categoryList.map((categoryName, index) => (
                 <li
-                  className="dropdown-item custom-categories"
+                  className="dropdown-item"
                   key={index}
-                  onClick={() => handleCategoryClick(index)}
+                  onClick={() => handleCategoryClick(categoryName)}
                   style={{ width: "21vh" }}
                 >
                   {categoryName}
+                </li>
+              ))}
+            </ul>
+          </li>
+          <li className="nav-item dropdown ms-2">
+            <div
+              className="d-flex nav-link text-dark fs-6 border rounded"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+              style={{ width: "21vh" }}
+            >
+              <span>{selectedBrand}</span>
+              <i className="bi bi-caret-down ms-auto" />
+            </div>
+            <ul className="dropdown-menu">
+              {brandList.map((brandName, index) => (
+                <li
+                  className="dropdown-item"
+                  key={index}
+                  // onClick={() => handleBrandClick(brandName)}
+                  style={{ width: "21vh" }}
+                >
+                  {brandName}
                 </li>
               ))}
             </ul>

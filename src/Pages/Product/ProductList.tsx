@@ -7,6 +7,7 @@ import { MainLoader } from "../../Components/Page/Common";
 import { Product } from "../../Interfaces";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { toastNotify } from "../../Helper";
 
 function ProductList() {
   const [deleteProduct] = useDeleteProductMutation();
@@ -14,19 +15,26 @@ function ProductList() {
   const navigate = useNavigate();
 
   const handleProductDelete = async (id: number) => {
-    alert();
-    deleteProduct(id);
-    toast.promise(
-      deleteProduct(id),
-      {
-        pending: "Processing your request...",
-        success: "Deleted Successfully",
-        error: "Error",
-      },
-      {
-        theme: "dark",
-      }
+    const deleteConfirm = window.confirm(
+      `Are you sure you want to delete product ${id}?`
     );
+
+    if (deleteConfirm == true) {
+      deleteProduct(id);
+      toast.promise(
+        deleteProduct(id),
+        {
+          pending: "Processing your request...",
+          success: "Deleted Successfully",
+          error: "Error",
+        },
+        {
+          theme: "dark",
+        }
+      );
+    } else {
+      toastNotify("Deletion cancelled", "default");
+    }
   };
 
   return (

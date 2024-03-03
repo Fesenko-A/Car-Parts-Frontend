@@ -8,6 +8,7 @@ export default interface Product {
   brand: Brand;
   name: string;
   description: string;
+  inStock: boolean;
   specialTagId: number;
   specialTag: SpecialTag;
   categoryId: number;

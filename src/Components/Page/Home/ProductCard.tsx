@@ -33,6 +33,11 @@ function ProductCard(props: Props) {
 
     if (response.data && response.data.isSuccess) {
       toastNotify("Item added to cart successfully!");
+    } else {
+      toastNotify(
+        "Error while adding this product to the shopping cart",
+        "error"
+      );
     }
 
     setIsAddingToCart(false);
@@ -84,19 +89,35 @@ function ProductCard(props: Props) {
               <MiniLoader />
             </div>
           ) : (
-            <i
-              onClick={() => handleAddToCart(props.product.id)}
-              className="bi bi-cart-plus btn btn-outline-danger"
-              style={{
-                position: "absolute",
-                top: "15px",
-                right: "15px",
-                padding: "5px 10px",
-                borderRadius: "3px",
-                outline: "none !important",
-                cursor: "pointer",
-              }}
-            ></i>
+            <>
+              {props.product.inStock ? (
+                <i
+                  onClick={() => handleAddToCart(props.product.id)}
+                  className="bi bi-cart-plus btn btn-outline-danger"
+                  style={{
+                    position: "absolute",
+                    top: "15px",
+                    right: "15px",
+                    outline: "none !important",
+                    cursor: "pointer",
+                  }}
+                ></i>
+              ) : (
+                <i
+                  className="bi bi-cart-x btn btn-outline-secondary"
+                  onClick={() =>
+                    toastNotify("This product is out of stock", "default")
+                  }
+                  style={{
+                    position: "absolute",
+                    top: "15px",
+                    right: "15px",
+                    outline: "none !important",
+                    cursor: "pointer",
+                  }}
+                ></i>
+              )}
+            </>
           )}
 
           <div className="text-center">

@@ -16,7 +16,7 @@ const productData = {
   brandId: "1",
   name: "",
   description: "",
-  inStock: "",
+  inStock: "true",
   specialTagId: "1",
   categoryId: "1",
   price: "",

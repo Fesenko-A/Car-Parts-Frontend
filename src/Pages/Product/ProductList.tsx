@@ -14,6 +14,7 @@ function ProductList() {
   const navigate = useNavigate();
 
   const handleProductDelete = async (id: number) => {
+    alert();
     deleteProduct(id);
     toast.promise(
       deleteProduct(id),

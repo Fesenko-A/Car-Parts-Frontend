@@ -44,20 +44,21 @@ function ProductList() {
           </div>
           <div className="p-2">
             <div className="row border">
-              <div style={{ width: "50px" }}>Id</div>
+              <div style={{ width: "3rem" }}>Id</div>
               <div className="col-1">Image</div>
               <div className="col-2">Name</div>
-              <div className="col-2">Category</div>
+              <div className="col-1">Category</div>
               <div className="col-2">Brand</div>
               <div className="col-1">Price</div>
               <div className="col-2">Special Tag</div>
+              <div className="col-1">In Stock</div>
               <div className="col-1">Actions</div>
             </div>
 
             {data.result.map((product: Product) => {
               return (
                 <div className="row border" key={product.id}>
-                  <div style={{ width: "50px" }}>{product.id}</div>
+                  <div style={{ width: "3rem" }}>{product.id}</div>
                   <div className="col-1">
                     <img
                       src={product.imageUrl}
@@ -70,10 +71,11 @@ function ProductList() {
                     />
                   </div>
                   <div className="col-2">{product.name}</div>
-                  <div className="col-2">{product.category.name}</div>
+                  <div className="col-1">{product.category.name}</div>
                   <div className="col-2">{product.brand.name}</div>
                   <div className="col-1">${product.price}</div>
                   <div className="col-2">{product.specialTag.name}</div>
+                  <div className="col-1">{product.inStock ? "Yes" : "No"}</div>
                   <div className="col-1">
                     <button
                       className="btn btn-primary"

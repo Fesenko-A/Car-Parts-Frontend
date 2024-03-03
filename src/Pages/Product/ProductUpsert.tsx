@@ -16,6 +16,7 @@ const productData = {
   brandId: "1",
   name: "",
   description: "",
+  inStock: "",
   specialTagId: "1",
   categoryId: "1",
   price: "",
@@ -44,6 +45,7 @@ function ProductUpsert() {
       const tempData = {
         brandId: productsData.result.brandId,
         name: productsData.result.name,
+        inStock: productsData.result.inStock,
         description: productsData.result.description,
         specialTagId: productsData.result.specialTagId,
         categoryId: productsData.result.categoryId,
@@ -86,16 +88,18 @@ function ProductUpsert() {
     const formData = new FormData();
     formData.append("Name", productInputs.name);
     formData.append("Description", productInputs.description);
+    formData.append("InStock", JSON.parse(productInputs.inStock));
     formData.append("BrandId", productInputs.brandId);
     formData.append("SpecialTagId", productInputs.specialTagId);
     formData.append("CategoryId", productInputs.categoryId);
-    formData.append("Price", productInputs.price.replace(".", ","));
+    formData.append("Price", productInputs.price.toString().replace(".", ","));
     formData.append("ImageUrl", productInputs.imageUrl);
 
     let response;
     if (id) {
       formData.append("Id", id);
       response = await updateProduct({ data: formData, id });
+      console.log(response);
       toastNotify("Product updated successfully!", "success");
     } else {
       response = await createProduct(formData);
@@ -159,6 +163,16 @@ function ProductUpsert() {
 
                   <select
                     className="form-control mt-3 form-select"
+                    name="inStock"
+                    value={productInputs.inStock}
+                    onChange={handleProductInput}
+                  >
+                    <option value={"true"}>In Stock</option>
+                    <option value={"false"}>Out of Stock</option>
+                  </select>
+
+                  <select
+                    className="form-control mt-3 form-select"
                     required
                     name="specialTagId"
                     value={productInputs.specialTagId}
@@ -200,6 +214,7 @@ function ProductUpsert() {
                     value={productInputs.imageUrl}
                     onChange={handleProductInput}
                   />
+
                   <div className="row">
                     <div className="col-6">
                       <button

@@ -14,16 +14,11 @@ function ProductListHome() {
   const [products, setProducts] = useState<Product[]>([]);
 
   const [selectedCategory, setSelectedCategory] = useState("All Categories");
-  const [selectedBrand, setSelectedBrand] = useState("All Brands");
 
   const { data, isLoading } = useGetAllProductsQuery(null);
-  const { data: categoriesData, isLoading: categoriesLoading } =
-    useGetAllCategoriesQuery(null);
-  const { data: brandsData, isLoading: brandsLoading } =
-    useGetAllBrandsQuery(null);
+  const { data: categoriesData } = useGetAllCategoriesQuery(null);
 
   const [categoryList, setCategoryList] = useState([""]);
-  const [brandList, setBrandList] = useState([""]);
 
   const dispatch = useDispatch();
   const [sortName, setSortName] = useState(SortingTypes.NAME_A_Z);
@@ -62,24 +57,12 @@ function ProductListHome() {
         );
         setCategoryList(tempCategoryList);
       }
-
-      const tempBrandList = ["All Brands"];
-      if (brandsData) {
-        brandsData.result.map((brand: any) => tempBrandList.push(brand.name));
-        setBrandList(tempBrandList);
-      }
     }
-  }, [data, categoriesData, brandsData]);
+  }, [data, categoriesData]);
 
   const handleCategoryClick = (name: string) => {
     setSelectedCategory(name);
     const tempArray = handleFilters(sortName, name, searchValue);
-    setProducts(tempArray);
-  };
-
-  const handleBrandClick = (name: string) => {
-    setSelectedBrand(name);
-    const tempArray = handleFilters(sortName, selectedCategory, searchValue);
     setProducts(tempArray);
   };
 
@@ -170,30 +153,6 @@ function ProductListHome() {
                   style={{ width: "21vh" }}
                 >
                   {categoryName}
-                </li>
-              ))}
-            </ul>
-          </li>
-          <li className="nav-item dropdown ms-2">
-            <div
-              className="d-flex nav-link text-dark fs-6 border rounded"
-              role="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-              style={{ width: "21vh" }}
-            >
-              <span>{selectedBrand}</span>
-              <i className="bi bi-caret-down ms-auto" />
-            </div>
-            <ul className="dropdown-menu">
-              {brandList.map((brandName, index) => (
-                <li
-                  className="dropdown-item"
-                  key={index}
-                  // onClick={() => handleBrandClick(brandName)}
-                  style={{ width: "21vh" }}
-                >
-                  {brandName}
                 </li>
               ))}
             </ul>

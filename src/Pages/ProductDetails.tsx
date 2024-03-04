@@ -66,58 +66,68 @@ function ProductDetails() {
               <br />
               {data.result?.name}
             </h2>
-            <span>
-              <span
-                className="badge text-bg-dark pt-2"
-                style={{ height: "40px", fontSize: "20px" }}
-              >
-                {data.result?.category.name}
-              </span>
+            <span
+              className="badge text-bg-dark pt-2 me-1"
+              style={{ height: "40px", fontSize: "20px" }}
+            >
+              {data.result?.category.name}
             </span>
-            <span>
-              <span
-                className="badge text-bg-light pt-2"
-                style={{ height: "40px", fontSize: "20px" }}
-              >
-                {data.result?.specialTag.name}
-              </span>
+            <span
+              className="badge text-bg-light pt-2"
+              style={{ height: "40px", fontSize: "20px" }}
+            >
+              {data.result?.specialTag.name}
             </span>
             <p style={{ fontSize: "20px" }} className="pt-2">
               {data.result?.description}
             </p>
             <span className="h3">${data.result?.price}</span> &nbsp;&nbsp;&nbsp;
-            <span
-              className="pb-2 p-3"
-              style={{ border: "1px solid #333", borderRadius: "30px" }}
-            >
-              <i
-                onClick={() => {
-                  handleQuantity(-1);
-                }}
-                className="bi bi-dash p-1"
-                style={{ fontSize: "20px", cursor: "pointer" }}
-              ></i>
-              <span className="h3 mt-3 px-3">{quantity}</span>
-              <i
-                onClick={() => {
-                  handleQuantity(1);
-                }}
-                className="bi bi-plus p-1"
-                style={{ fontSize: "25px", cursor: "pointer" }}
-              ></i>
-            </span>
+            {data.result?.inStock ? (
+              <>
+                <span
+                  className="pb-2 p-3"
+                  style={{ border: "1px solid #333", borderRadius: "30px" }}
+                >
+                  <i
+                    onClick={() => {
+                      handleQuantity(-1);
+                    }}
+                    className="bi bi-dash p-1"
+                    style={{ fontSize: "20px", cursor: "pointer" }}
+                  ></i>
+                  <span className="h3 mt-3 px-3">{quantity}</span>
+                  <i
+                    onClick={() => {
+                      handleQuantity(1);
+                    }}
+                    className="bi bi-plus p-1"
+                    style={{ fontSize: "25px", cursor: "pointer" }}
+                  ></i>
+                </span>
+              </>
+            ) : (
+              ""
+            )}
             <div className="row pt-4">
               <div className="col-5">
-                {isAddingToCart ? (
-                  <button disabled className="btn btn-primary form-control">
-                    <MiniLoader size={30} />
-                  </button>
+                {data.result?.inStock ? (
+                  <>
+                    {isAddingToCart ? (
+                      <button disabled className="btn btn-primary form-control">
+                        <MiniLoader size={30} />
+                      </button>
+                    ) : (
+                      <button
+                        className="btn btn-primary form-control"
+                        onClick={() => handleAddToCart(data.result?.id)}
+                      >
+                        Add to Cart
+                      </button>
+                    )}
+                  </>
                 ) : (
-                  <button
-                    className="btn btn-primary form-control"
-                    onClick={() => handleAddToCart(data.result?.id)}
-                  >
-                    Add to Cart
+                  <button className="btn btn-primary form-control disabled">
+                    Out of Stock
                   </button>
                 )}
               </div>

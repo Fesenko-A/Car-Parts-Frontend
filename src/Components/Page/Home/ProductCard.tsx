@@ -67,8 +67,6 @@ function ProductCard(props: Props) {
                   position: "absolute",
                   top: "15px",
                   left: "15px",
-                  padding: "5px 10px",
-                  borderRadius: "3px",
                   outline: "none !important",
                   cursor: "pointer",
                   fontStyle: "normal",

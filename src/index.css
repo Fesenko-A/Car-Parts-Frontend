@@ -11,3 +11,19 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.my-card-title-text {
+  --max-lines: 1;
+  --line-height: 1.8;
+  list-style: var(--line-height);
+  overflow: hidden;
+  max-height: calc(var(--max-lines) * 1em * var(--line-height));
+}
+
+.my-card-text {
+  --max-lines: 3;
+  --line-height: 1.5;
+  list-style: var(--line-height);
+  overflow: hidden;
+  max-height: calc(var(--max-lines) * 1em * var(--line-height));
+}

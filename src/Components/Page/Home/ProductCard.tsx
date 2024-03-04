@@ -44,96 +44,81 @@ function ProductCard(props: Props) {
   };
 
   return (
-    <div className="col-md-4 col-12 p-4">
+    <>
       <div
-        className="card"
-        style={{ boxShadow: "0 1px 7px 0 rgb(0 0 0 / 50%)" }}
+        className="card container m-2"
+        style={{ width: "19rem", height: "29.5rem", borderColor: "#e6e6e6" }}
       >
-        <div className="card-body pt-2">
-          <div className="row col-10 offset-1 p-4">
+        <div className="card-body row">
+          <div className="text-center pt-3" style={{ height: "16rem" }}>
             <Link to={`productDetails/${props.product.id}`}>
               <img
                 src={props.product.imageUrl}
                 alt={props.product.name}
-                className="w-100 mt-5 image-box"
+                className="image-box"
+                style={{ width: "87%" }}
               />
             </Link>
+            <h5 className="card-title my-card-title-text pt-2">
+              {props.product.name}
+            </h5>
           </div>
           {props.product.specialTag.name.length > 1 &&
             props.product.specialTag && (
               <i
-                className="bi bi-heart btn btn-primary active"
+                className="btn btn-primary active"
                 style={{
                   position: "absolute",
-                  top: "15px",
-                  left: "15px",
-                  outline: "none !important",
-                  cursor: "pointer",
+                  width: "34%",
+                  borderRadius: "30px",
+                  padding: "4px",
                   fontStyle: "normal",
                 }}
               >
-                &nbsp; {props.product.specialTag.name}
+                {props.product.specialTag.name}
               </i>
             )}
-
+          <p
+            className="card-text my-card-text"
+            style={{
+              height: "10rem",
+              marginBottom: "0.5rem",
+              marginTop: "1rem",
+            }}
+          >
+            {props.product.description}
+          </p>
+          <h4 className="card-text mb-0 text-center">${props.product.price}</h4>
           {isAddingToCart ? (
-            <div
-              style={{
-                position: "absolute",
-                top: "15px",
-                right: "15px",
-              }}
-            >
-              <MiniLoader />
-            </div>
+            <a className="btn btn-primary mt-auto" style={{ height: "2.4rem" }}>
+              <MiniLoader type="light" size={70} />
+            </a>
           ) : (
             <>
               {props.product.inStock ? (
-                <i
+                <a
                   onClick={() => handleAddToCart(props.product.id)}
-                  className="bi bi-cart-plus btn btn-outline-danger"
-                  style={{
-                    position: "absolute",
-                    top: "15px",
-                    right: "15px",
-                    outline: "none !important",
-                    cursor: "pointer",
-                  }}
-                ></i>
+                  className="btn btn-primary mt-auto"
+                  style={{ height: "2.4rem" }}
+                >
+                  Add to Cart
+                </a>
               ) : (
-                <i
-                  className="bi bi-cart-x btn btn-outline-secondary"
+                <a
                   onClick={() =>
                     toastNotify("This product is out of stock", "default")
                   }
-                  style={{
-                    position: "absolute",
-                    top: "15px",
-                    right: "15px",
-                    outline: "none !important",
-                    cursor: "pointer",
-                  }}
-                ></i>
+                  className="btn btn-outline-primary mt-auto"
+                  style={{ height: "2.4rem" }}
+                >
+                  Out of Stock
+                </a>
               )}
             </>
           )}
-
-          <div className="text-center">
-            <Link
-              to={`productDetails/${props.product.id}`}
-              className="card-title m-0 text-primary fs-3"
-              style={{ textDecoration: "none", color: "green" }}
-            >
-              {props.product.name}
-            </Link>
-            <p style={{ fontSize: "14px" }}>{props.product.category.name}</p>
-          </div>
-          <div className="row text-center">
-            <h4>${props.product.price}</h4>
-          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 

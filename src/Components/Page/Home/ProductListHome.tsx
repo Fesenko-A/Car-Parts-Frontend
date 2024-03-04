@@ -163,7 +163,7 @@ function ProductListHome() {
               role="button"
               data-bs-toggle="dropdown"
               aria-expanded="false"
-              style={{ width: "16vh" }}
+              style={{ width: "20vh" }}
             >
               <span>{sortName}</span>
               <i className="bi bi-caret-down ms-auto" />
@@ -174,7 +174,7 @@ function ProductListHome() {
                   key={index}
                   className="dropdown-item"
                   onClick={() => handleSortClick(index)}
-                  style={{ width: "16vh" }}
+                  style={{ width: "20vh" }}
                 >
                   {sortType}
                 </li>

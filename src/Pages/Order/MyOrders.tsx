@@ -5,18 +5,8 @@ import { RootState } from "../../Storage/store";
 import { useGetAllOrdersQuery } from "../../APIs/orderApi";
 import { OrderList } from "../../Components/Page/Order";
 import { MainLoader } from "../../Components/Page/Common";
-import { OrderStatuses } from "../../Static";
 import { getPageDetails, inputHelper } from "../../Helper";
-
-const filterOptions = [
-  "All",
-  OrderStatuses.PENDING,
-  OrderStatuses.CONFIRMED,
-  OrderStatuses.PROCESSING,
-  OrderStatuses.READY,
-  OrderStatuses.COMPLETED,
-  OrderStatuses.CANCELLED,
-];
+import filterOptions from "./filterOptions";
 
 function MyOrders() {
   const userId = useSelector((state: RootState) => state.userAuthStore.id);

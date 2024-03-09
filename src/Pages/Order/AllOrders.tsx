@@ -4,17 +4,7 @@ import { useGetAllOrdersQuery } from "../../APIs/orderApi";
 import { OrderList } from "../../Components/Page/Order";
 import { MainLoader } from "../../Components/Page/Common";
 import { getPageDetails, inputHelper } from "../../Helper";
-import { OrderStatuses } from "../../Static";
-
-const filterOptions = [
-  "All",
-  OrderStatuses.PENDING,
-  OrderStatuses.CONFIRMED,
-  OrderStatuses.PROCESSING,
-  OrderStatuses.READY,
-  OrderStatuses.COMPLETED,
-  OrderStatuses.CANCELLED,
-];
+import filterOptions from "./filterOptions";
 
 function AllOrders() {
   const [filters, setFilters] = useState({ searchString: "", status: "" });

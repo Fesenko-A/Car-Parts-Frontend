@@ -6,13 +6,15 @@ import { useGetAllOrdersQuery } from "../../APIs/orderApi";
 import { OrderList } from "../../Components/Page/Order";
 import { MainLoader } from "../../Components/Page/Common";
 import { OrderStatuses } from "../../Static";
-import { inputHelper } from "../../Helper";
+import { getPageDetails, inputHelper } from "../../Helper";
 
 const filterOptions = [
   "All",
+  OrderStatuses.PENDING,
   OrderStatuses.CONFIRMED,
   OrderStatuses.PROCESSING,
   OrderStatuses.READY,
+  OrderStatuses.COMPLETED,
   OrderStatuses.CANCELLED,
 ];
 
@@ -20,6 +22,13 @@ function MyOrders() {
   const userId = useSelector((state: RootState) => state.userAuthStore.id);
   const [filters, setFilters] = useState({ status: "" });
   const [orderData, setOrderData] = useState([]);
+
+  const [totalRecords, setTotalRecords] = useState(0);
+  const [pageOptions, setPageOptions] = useState({
+    pageNumber: 1,
+    pageSize: 5,
+  });
+  const [currentPageSize, setCurrentPageSize] = useState(pageOptions.pageSize);
 
   const [apiFilters, setApiFilters] = useState({
     status: "",
@@ -30,6 +39,8 @@ function MyOrders() {
     ...(apiFilters && {
       status: apiFilters.status,
       userId: apiFilters.userId,
+      pageNumber: pageOptions.pageNumber,
+      pageSize: pageOptions.pageSize,
     }),
   });
 
@@ -50,8 +61,20 @@ function MyOrders() {
   useEffect(() => {
     if (data) {
       setOrderData(data?.apiResponse.result);
+      const { TotalRecords } = JSON.parse(data.totalRecords);
+      setTotalRecords(TotalRecords);
     }
   }, [data]);
+
+  const handlePageOptionChange = (direction: string, pageSize?: number) => {
+    if (direction === "prev") {
+      setPageOptions({ pageSize: 5, pageNumber: pageOptions.pageNumber - 1 });
+    } else if (direction === "next") {
+      setPageOptions({ pageSize: 5, pageNumber: pageOptions.pageNumber + 1 });
+    } else if (direction === "change") {
+      setPageOptions({ pageSize: pageSize ? pageSize : 5, pageNumber: 1 });
+    }
+  };
 
   return (
     <>
@@ -81,6 +104,48 @@ function MyOrders() {
             </div>
           </div>
           <OrderList isLoading={isLoading} orderData={orderData} />
+          <div className="d-flex mx-5 justify-content-end align-items-center">
+            <div>Rows per Page: </div>
+            <div>
+              <select
+                className="form-select mx-2"
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                  handlePageOptionChange("change", Number(e.target.value));
+                  setCurrentPageSize(Number(e.target.value));
+                }}
+                style={{ width: "80px" }}
+                value={currentPageSize}
+              >
+                <option>5</option>
+                <option>10</option>
+                <option>15</option>
+                <option>20</option>
+              </select>
+            </div>
+            <div className="mx-2">
+              {getPageDetails(
+                pageOptions.pageNumber,
+                pageOptions.pageSize,
+                totalRecords
+              )}
+            </div>
+            <button
+              onClick={() => handlePageOptionChange("prev")}
+              disabled={pageOptions.pageNumber === 1}
+              className="btn btn-outline-primary px-3 mx-2"
+            >
+              <i className="bi bi-chevron-left" />
+            </button>
+            <button
+              onClick={() => handlePageOptionChange("next")}
+              disabled={
+                pageOptions.pageNumber * pageOptions.pageSize >= totalRecords
+              }
+              className="btn btn-outline-primary px-3 mx-2"
+            >
+              <i className="bi bi-chevron-right" />
+            </button>
+          </div>
         </>
       )}
     </>

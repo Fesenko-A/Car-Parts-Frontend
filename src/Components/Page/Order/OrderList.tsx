@@ -45,8 +45,16 @@ function OrderList({ isLoading, orderData }: OrderListType) {
                     </span>
                   </div>
                   <div className="col-1">
-                    {orderItem.paymentMethod?.description}
-                    {" - "}
+                    {orderItem.paymentMethod?.description === "Cash" ? (
+                      <>
+                        <i className="bi bi-cash-stack"></i>
+                      </>
+                    ) : (
+                      <>
+                        <i className="bi bi-credit-card"></i>
+                      </>
+                    )}
+                    &nbsp;
                     {orderItem.paid ? "Paid" : "Unpaid"}
                   </div>
                   <div className="col-2">

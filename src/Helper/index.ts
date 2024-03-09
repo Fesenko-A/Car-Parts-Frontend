@@ -3,6 +3,7 @@ import toastNotify from "./toastNotify";
 import getStatusColor from "./getStatusColor";
 import getPaidColor from "./getPaidColor";
 import getPaymentStatusColor from "./getPaymentStatusColor";
+import getPageDetails from "./getPageDetails";
 
 export {
   inputHelper,
@@ -10,4 +11,5 @@ export {
   getStatusColor,
   getPaidColor,
   getPaymentStatusColor,
+  getPageDetails,
 };

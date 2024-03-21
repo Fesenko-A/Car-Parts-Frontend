@@ -50,6 +50,7 @@ function MyOrders() {
 
   useEffect(() => {
     if (data) {
+      handleFilters();
       setOrderData(data?.apiResponse.result);
       const { TotalRecords } = JSON.parse(data.totalRecords);
       setTotalRecords(TotalRecords);

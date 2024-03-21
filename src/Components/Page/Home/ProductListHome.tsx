@@ -3,25 +3,11 @@ import { Product } from "../../../Interfaces";
 import { ProductCard } from "./";
 import { useGetAllProductsQuery } from "../../../APIs/productApi";
 import { MainLoader } from "../Common";
-import { RootState } from "../../../Storage/store";
-import { useDispatch, useSelector } from "react-redux";
-import { setProduct } from "../../../Storage/productSlice";
 import { SortingTypes } from "../../../Static";
 import { useGetAllCategoriesQuery } from "../../../APIs/categoriesApi";
-import { useGetAllBrandsQuery } from "../../../APIs/brandApi";
 
 function ProductListHome() {
   const [products, setProducts] = useState<Product[]>([]);
-
-  const [selectedCategory, setSelectedCategory] = useState("All Categories");
-
-  const { data, isLoading } = useGetAllProductsQuery(null);
-  const { data: categoriesData } = useGetAllCategoriesQuery(null);
-
-  const [categoryList, setCategoryList] = useState([""]);
-
-  const dispatch = useDispatch();
-  const [sortName, setSortName] = useState(SortingTypes.NAME_A_Z);
 
   const sortOptions: Array<SortingTypes> = [
     SortingTypes.PRICE_LOW_HIGH,
@@ -30,26 +16,38 @@ function ProductListHome() {
     SortingTypes.NAME_Z_A,
   ];
 
-  const searchValue = useSelector(
-    (state: RootState) => state.productStore.search
-  );
+  const [totalRecords, setTotalRecords] = useState(0);
+  const [pageOptions, setPageOptions] = useState({
+    pageNumber: 1,
+    pageSize: 5,
+  });
+  const [currentPageSize, setCurrentPageSize] = useState(pageOptions.pageSize);
+
+  const [selectedCategory, setSelectedCategory] = useState("All Categories");
+
+  const [apiFilters, setApiFilters] = useState({
+    brand: "All Brands",
+    category: selectedCategory,
+    specialTag: "All Special Tags",
+    searchString: "",
+  });
+
+  const { data, isLoading } = useGetAllProductsQuery({
+    brand: apiFilters.brand,
+    category: apiFilters.category,
+    specialTag: apiFilters.specialTag,
+    searchString: apiFilters.searchString,
+    pageNumber: pageOptions.pageNumber,
+    pageSize: pageOptions.pageSize,
+  });
+  const { data: categoriesData, isLoading: categoriesLoading } =
+    useGetAllCategoriesQuery(null);
+  const [categoryList, setCategoryList] = useState([""]);
+
+  const [sortName, setSortName] = useState(SortingTypes.NAME_A_Z);
 
   useEffect(() => {
-    if (data && data.result) {
-      const tempMenuArray = handleFilters(
-        sortName,
-        selectedCategory,
-        searchValue
-      );
-      setProducts(tempMenuArray);
-    }
-  }, [searchValue]);
-
-  useEffect(() => {
-    if (!isLoading) {
-      dispatch(setProduct(data.result));
-      setProducts(data.result);
-
+    if (!categoriesLoading) {
       const tempCategoryList = ["All Categories"];
       if (categoriesData) {
         categoriesData.result.map((category: any) =>
@@ -58,71 +56,53 @@ function ProductListHome() {
         setCategoryList(tempCategoryList);
       }
     }
-  }, [data, categoriesData]);
+  }, [categoriesData, categoriesLoading]);
+
+  useEffect(() => {
+    if (data) {
+      setProducts(data?.apiResponse.result);
+      const { TotalRecords } = JSON.parse(data.totalRecords);
+      setTotalRecords(TotalRecords);
+    }
+  }, [data, isLoading]);
 
   const handleCategoryClick = (name: string) => {
     setSelectedCategory(name);
-    const tempArray = handleFilters(sortName, name, searchValue);
-    setProducts(tempArray);
   };
 
-  const handleSortClick = (i: number) => {
-    setSortName(sortOptions[i]);
-    const tempArray = handleFilters(
-      sortOptions[i],
-      selectedCategory,
-      searchValue
-    );
-    setProducts(tempArray);
-  };
+  // const handleSort = (sortType: SortingTypes) => {
+  //   if (sortType === SortingTypes.PRICE_LOW_HIGH) {
+  //     products.sort((a: Product, b: Product) => a.price - b.price);
+  //   }
 
-  const handleFilters = (
-    sortType: SortingTypes,
-    category: string,
-    search: string
-  ) => {
-    let tempArray =
-      category === "All Categories"
-        ? [...data.result]
-        : data.result.filter(
-            (item: Product) =>
-              item.category.name.toUpperCase() === category.toUpperCase()
-          );
+  //   if (sortType === SortingTypes.PRICE_HIGH_LOW) {
+  //     products.sort((a: Product, b: Product) => b.price - a.price);
+  //   }
 
-    // Search functionality
-    if (search) {
-      const tempArray2 = [...tempArray];
-      tempArray = tempArray2.filter((item: Product) =>
-        item.name.toUpperCase().includes(search.toUpperCase())
-      );
-    }
+  //   if (sortType === SortingTypes.NAME_A_Z) {
+  //     products.sort(
+  //       (a: Product, b: Product) =>
+  //         a.name.toUpperCase().charCodeAt(0) -
+  //         b.name.toUpperCase().charCodeAt(0)
+  //     );
+  //   }
 
-    // Sort functionality
-    if (sortType === SortingTypes.PRICE_LOW_HIGH) {
-      tempArray.sort((a: Product, b: Product) => a.price - b.price);
-    }
+  //   if (sortType === SortingTypes.NAME_Z_A) {
+  //     products.sort(
+  //       (a: Product, b: Product) =>
+  //         b.name.toUpperCase().charCodeAt(0) -
+  //         a.name.toUpperCase().charCodeAt(0)
+  //     );
+  //   }
+  // };
 
-    if (sortType === SortingTypes.PRICE_HIGH_LOW) {
-      tempArray.sort((a: Product, b: Product) => b.price - a.price);
-    }
-
-    if (sortType === SortingTypes.NAME_A_Z) {
-      tempArray.sort(
-        (a: Product, b: Product) =>
-          a.name.toUpperCase().charCodeAt(0) -
-          b.name.toUpperCase().charCodeAt(0)
-      );
-    }
-
-    if (sortType === SortingTypes.NAME_Z_A) {
-      tempArray.sort(
-        (a: Product, b: Product) =>
-          b.name.toUpperCase().charCodeAt(0) -
-          a.name.toUpperCase().charCodeAt(0)
-      );
-    }
-
-    return tempArray;
+  const handleFilters = () => {
+    setApiFilters({
+      brand: "All Brands",
+      category: selectedCategory,
+      specialTag: "All Special Tags",
+      searchString: "",
+    });
   };
 
   if (isLoading) {
@@ -157,6 +137,11 @@ function ProductListHome() {
               ))}
             </ul>
           </li>
+          <li>
+            <button className="btn btn-outline-primary" onClick={handleFilters}>
+              Filter
+            </button>
+          </li>
           <li className="nav-item dropdown" style={{ marginLeft: "auto" }}>
             <div
               className="d-flex nav-link text-dark fs-6 border rounded"
@@ -173,7 +158,7 @@ function ProductListHome() {
                 <li
                   key={index}
                   className="dropdown-item"
-                  onClick={() => handleSortClick(index)}
+                  // onClick={() => handleSort(sortType)}
                   style={{ width: "20vh" }}
                 >
                   {sortType}

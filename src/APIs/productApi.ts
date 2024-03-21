@@ -13,9 +13,30 @@ const productApi = createApi({
   tagTypes: ["Products"],
   endpoints: (builder) => ({
     getAllProducts: builder.query({
-      query: () => ({
+      query: ({
+        brand,
+        category,
+        specialTag,
+        searchString,
+        pageNumber,
+        pageSize,
+      }) => ({
         url: "products/getall",
+        params: {
+          ...(brand && { brand }),
+          ...(category && { category }),
+          ...(specialTag && { specialTag }),
+          ...(searchString && { searchString }),
+          ...(pageNumber && { pageNumber }),
+          ...(pageSize && { pageSize }),
+        },
       }),
+      transformResponse(apiResponse: { result: any }, meta: any) {
+        return {
+          apiResponse,
+          totalRecords: meta.response.headers.get("X-Pagination"),
+        };
+      },
       providesTags: ["Products"],
     }),
     getProductById: builder.query({

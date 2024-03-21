@@ -19,7 +19,7 @@ function ProductList() {
       `Are you sure you want to delete product ${id}?`
     );
 
-    if (deleteConfirm == true) {
+    if (deleteConfirm === true) {
       deleteProduct(id);
       toast.promise(
         deleteProduct(id),
@@ -64,7 +64,7 @@ function ProductList() {
               <div className="col-1">Actions</div>
             </div>
 
-            {data.result.map((product: Product) => {
+            {data?.apiResponse.result.map((product: Product) => {
               return (
                 <div className="row border" key={product.id}>
                   <div style={{ width: "3rem" }}>{product.id}</div>

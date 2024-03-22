@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Product } from "../../../Interfaces";
+import { Brand, Category, Product } from "../../../Interfaces";
 import { ProductCard } from "./";
 import { useGetAllProductsQuery } from "../../../APIs/productApi";
 import { MainLoader } from "../Common";
 import { SortingTypes } from "../../../Static";
 import { useGetAllCategoriesQuery } from "../../../APIs/categoriesApi";
+import { useGetAllBrandsQuery } from "../../../APIs/brandApi";
 
 function ProductListHome() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -24,9 +25,10 @@ function ProductListHome() {
   const [currentPageSize, setCurrentPageSize] = useState(pageOptions.pageSize);
 
   const [selectedCategory, setSelectedCategory] = useState("All Categories");
+  const [selectedBrand, setSelectedBrand] = useState("All Brands");
 
   const [apiFilters, setApiFilters] = useState({
-    brand: "All Brands",
+    brand: selectedBrand,
     category: selectedCategory,
     specialTag: "All Special Tags",
     searchString: "",
@@ -42,7 +44,11 @@ function ProductListHome() {
   });
   const { data: categoriesData, isLoading: categoriesLoading } =
     useGetAllCategoriesQuery(null);
+  const { data: brandsData, isLoading: brandsLoading } =
+    useGetAllBrandsQuery(null);
+
   const [categoryList, setCategoryList] = useState([""]);
+  const [brandsList, setBrandsList] = useState([""]);
 
   const [sortName, setSortName] = useState(SortingTypes.NAME_A_Z);
 
@@ -50,13 +56,23 @@ function ProductListHome() {
     if (!categoriesLoading) {
       const tempCategoryList = ["All Categories"];
       if (categoriesData) {
-        categoriesData.result.map((category: any) =>
+        categoriesData.result.map((category: Category) =>
           tempCategoryList.push(category.name)
         );
         setCategoryList(tempCategoryList);
       }
     }
   }, [categoriesData, categoriesLoading]);
+
+  useEffect(() => {
+    if (!brandsLoading) {
+      const tempBrandList = ["All Brands"];
+      if (brandsData) {
+        brandsData.result.map((brand: Brand) => tempBrandList.push(brand.name));
+        setBrandsList(tempBrandList);
+      }
+    }
+  }, [brandsData, brandsLoading]);
 
   useEffect(() => {
     if (data) {
@@ -68,6 +84,10 @@ function ProductListHome() {
 
   const handleCategoryClick = (name: string) => {
     setSelectedCategory(name);
+  };
+
+  const handleBrandClick = (name: string) => {
+    setSelectedBrand(name);
   };
 
   // const handleSort = (sortType: SortingTypes) => {
@@ -98,7 +118,7 @@ function ProductListHome() {
 
   const handleFilters = () => {
     setApiFilters({
-      brand: "All Brands",
+      brand: selectedBrand,
       category: selectedCategory,
       specialTag: "All Special Tags",
       searchString: "",
@@ -115,7 +135,7 @@ function ProductListHome() {
         <ul className="nav w-100 d-flex justify-content-center">
           <li className="nav-item dropdown">
             <div
-              className="d-flex nav-link text-dark fs-6 border rounded"
+              className="d-flex nav-link text-dark fs-6 border rounded me-1"
               role="button"
               data-bs-toggle="dropdown"
               aria-expanded="false"
@@ -133,6 +153,30 @@ function ProductListHome() {
                   style={{ width: "21vh" }}
                 >
                   {categoryName}
+                </li>
+              ))}
+            </ul>
+          </li>
+          <li className="nav-item dropdown">
+            <div
+              className="d-flex nav-link text-dark fs-6 border rounded"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+              style={{ width: "17vh" }}
+            >
+              <span>{selectedBrand}</span>
+              <i className="bi bi-caret-down ms-auto" />
+            </div>
+            <ul className="dropdown-menu">
+              {brandsList.map((brandName, index) => (
+                <li
+                  className="dropdown-item"
+                  key={index}
+                  onClick={() => handleBrandClick(brandName)}
+                  style={{ width: "17vh" }}
+                >
+                  {brandName}
                 </li>
               ))}
             </ul>

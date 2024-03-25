@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Brand, Category, Product, SpecialTag } from "../../../Interfaces";
-import { ProductCard } from "./";
+import { FiltersButton, ProductCard } from "./";
 import { useGetAllProductsQuery } from "../../../APIs/productApi";
 import { MainLoader } from "../Common";
 import { SortingTypes } from "../../../Static";
@@ -24,7 +24,7 @@ function ProductListHome() {
     pageSize: 6,
   });
   const [currentPageSize, setCurrentPageSize] = useState(pageOptions.pageSize);
-
+  const [showFilters, setShowFilters] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("All Categories");
   const [selectedBrand, setSelectedBrand] = useState("All Brands");
   const [selectedSpecialTag, setSelectedSpecialTag] =
@@ -147,15 +147,22 @@ function ProductListHome() {
     });
   };
 
+  const handleShowFilters = () => {
+    showFilters === false ? setShowFilters(true) : setShowFilters(false);
+  };
+
   if (isLoading) {
     return <MainLoader />;
   }
 
   return (
     <div>
-      <div className="custom-banner row m-auto align-items-center">
-        <div className="col-12 mt-5">
-          <div className="input-group">
+      <div
+        className="custom-banner row m-auto align-items-center"
+        style={{ height: "30vh" }}
+      >
+        <div className="col-12 mt-4">
+          <div className="input-group mb-5">
             <input
               type={"text"}
               className="input-group-text ms-auto rounded-start-pill"
@@ -164,121 +171,91 @@ function ProductListHome() {
                 width: "25rem",
               }}
               placeholder="Search for Details!"
-              // value={value}
-              // onChange={handleChange}
             />
+            <button
+              className="btn btn-light"
+              onClick={handleShowFilters}
+              type="button"
+            >
+              <i className="bi bi-funnel"></i>
+            </button>
             <button
               className="btn btn-light me-auto rounded-end-pill"
               type="button"
-              id="button-addon2"
               onClick={handleFilters}
             >
               <i className="bi bi-search"></i>
             </button>
           </div>
         </div>
-      </div>
-      <div className="container">
-        <div className="my-3">
-          <ul className="nav w-100 d-flex justify-content-center">
-            <li className="nav-item dropdown">
-              <div
-                className="d-flex nav-link text-dark fs-6 border rounded me-1"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-                style={{ width: "21vh" }}
-              >
-                <span>{selectedCategory}</span>
-                <i className="bi bi-caret-down ms-auto" />
-              </div>
-              <ul className="dropdown-menu">
-                {categoryList.map((categoryName, index) => (
-                  <li
-                    className="dropdown-item"
-                    key={index}
-                    onClick={() => handleCategoryClick(categoryName)}
-                    style={{ width: "21vh" }}
-                  >
-                    {categoryName}
-                  </li>
-                ))}
-              </ul>
-            </li>
-            <li className="nav-item dropdown">
-              <div
-                className="d-flex nav-link text-dark fs-6 border rounded me-1"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-                style={{ width: "18vh" }}
-              >
-                <span>{selectedBrand}</span>
-                <i className="bi bi-caret-down ms-auto" />
-              </div>
-              <ul className="dropdown-menu">
-                {brandsList.map((brandName, index) => (
-                  <li
-                    className="dropdown-item"
-                    key={index}
-                    onClick={() => handleBrandClick(brandName)}
-                    style={{ width: "18vh" }}
-                  >
-                    {brandName}
-                  </li>
-                ))}
-              </ul>
-            </li>
-            <li className="nav-item dropdown">
-              <div
-                className="d-flex nav-link text-dark fs-6 border rounded me-1"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-                style={{ width: "23vh" }}
-              >
-                <span>{selectedSpecialTag}</span>
-                <i className="bi bi-caret-down ms-auto" />
-              </div>
-              <ul className="dropdown-menu">
-                {specialTagsList.map((tagName, index) => (
-                  <li
-                    className="dropdown-item"
-                    key={index}
-                    onClick={() => handleSpecialTagsClick(tagName)}
-                    style={{ width: "23vh" }}
-                  >
-                    {tagName}
-                  </li>
-                ))}
-              </ul>
-            </li>
-            <li className="nav-item dropdown" style={{ marginLeft: "auto" }}>
-              <div
-                className="d-flex nav-link text-dark fs-6 border rounded"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-                style={{ width: "20vh" }}
-              >
-                <span>{sortName}</span>
-                <i className="bi bi-caret-down ms-auto" />
-              </div>
-              <ul className="dropdown-menu">
-                {sortOptions.map((sortType, index) => (
-                  <li
-                    key={index}
-                    className="dropdown-item"
-                    // onClick={() => handleSort(sortType)}
-                    style={{ width: "20vh" }}
-                  >
-                    {sortType}
-                  </li>
-                ))}
-              </ul>
-            </li>
-          </ul>
+        <div className="position-absolute" style={{ marginTop: "8rem" }}>
+          {showFilters === true && (
+            <ul className="nav w-100 justify-content-center">
+              <li className="nav-item dropdown">
+                <FiltersButton buttonText={selectedCategory}></FiltersButton>
+                <ul className="dropdown-menu">
+                  {categoryList.map((categoryName, index) => (
+                    <li
+                      className="dropdown-item"
+                      key={index}
+                      onClick={() => handleCategoryClick(categoryName)}
+                      style={{ width: "fit-content" }}
+                    >
+                      {categoryName}
+                    </li>
+                  ))}
+                </ul>
+              </li>
+              <li className="nav-item dropdown">
+                <FiltersButton buttonText={selectedBrand}></FiltersButton>
+                <ul className="dropdown-menu">
+                  {brandsList.map((brandName, index) => (
+                    <li
+                      className="dropdown-item"
+                      key={index}
+                      onClick={() => handleBrandClick(brandName)}
+                      style={{ width: "fit-content" }}
+                    >
+                      {brandName}
+                    </li>
+                  ))}
+                </ul>
+              </li>
+              <li className="nav-item dropdown">
+                <FiltersButton buttonText={selectedSpecialTag}></FiltersButton>
+                <ul className="dropdown-menu">
+                  {specialTagsList.map((tagName, index) => (
+                    <li
+                      className="dropdown-item"
+                      key={index}
+                      onClick={() => handleSpecialTagsClick(tagName)}
+                      style={{ width: "fit-content" }}
+                    >
+                      {tagName}
+                    </li>
+                  ))}
+                </ul>
+              </li>
+              <li className="nav-item dropdown">
+                <FiltersButton buttonText={sortName}></FiltersButton>
+                <ul className="dropdown-menu">
+                  {sortOptions.map((sortType, index) => (
+                    <li
+                      key={index}
+                      className="dropdown-item"
+                      // onClick={() => handleSort(sortType)}
+                      style={{ width: "fit-content" }}
+                    >
+                      {sortType}
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            </ul>
+          )}
         </div>
+      </div>
+      <div className="container mt-4">
         <div className="row" style={{ justifyContent: "center" }}>
           {products.length > 0 &&
             products.map((product: Product, index: number) => (

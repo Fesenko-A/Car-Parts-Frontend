@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Brand, Category, Product } from "../../../Interfaces";
+import { Brand, Category, Product, SpecialTag } from "../../../Interfaces";
 import { ProductCard } from "./";
 import { useGetAllProductsQuery } from "../../../APIs/productApi";
 import { MainLoader } from "../Common";
 import { SortingTypes } from "../../../Static";
 import { useGetAllCategoriesQuery } from "../../../APIs/categoriesApi";
 import { useGetAllBrandsQuery } from "../../../APIs/brandApi";
+import { useGetAllSpecialTagsQuery } from "../../../APIs/specialTagsApi";
 
 function ProductListHome() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -26,11 +27,13 @@ function ProductListHome() {
 
   const [selectedCategory, setSelectedCategory] = useState("All Categories");
   const [selectedBrand, setSelectedBrand] = useState("All Brands");
+  const [selectedSpecialTag, setSelectedSpecialTag] =
+    useState("All Special Tags");
 
   const [apiFilters, setApiFilters] = useState({
     brand: selectedBrand,
     category: selectedCategory,
-    specialTag: "All Special Tags",
+    specialTag: selectedSpecialTag,
     searchString: "",
   });
 
@@ -46,9 +49,12 @@ function ProductListHome() {
     useGetAllCategoriesQuery(null);
   const { data: brandsData, isLoading: brandsLoading } =
     useGetAllBrandsQuery(null);
+  const { data: specialTagsData, isLoading: specialTagsLoading } =
+    useGetAllSpecialTagsQuery(null);
 
   const [categoryList, setCategoryList] = useState([""]);
   const [brandsList, setBrandsList] = useState([""]);
+  const [specialTagsList, setSpecialTagsList] = useState([""]);
 
   const [sortName, setSortName] = useState(SortingTypes.NAME_A_Z);
 
@@ -75,6 +81,18 @@ function ProductListHome() {
   }, [brandsData, brandsLoading]);
 
   useEffect(() => {
+    if (!specialTagsLoading) {
+      const tempTagsList = ["All Special Tags"];
+      if (specialTagsData) {
+        specialTagsData.result.map((specialTag: SpecialTag) => {
+          if (specialTag.name !== "") tempTagsList.push(specialTag.name);
+        });
+        setSpecialTagsList(tempTagsList);
+      }
+    }
+  }, [specialTagsData, specialTagsLoading]);
+
+  useEffect(() => {
     if (data) {
       setProducts(data?.apiResponse.result);
       const { TotalRecords } = JSON.parse(data.totalRecords);
@@ -88,6 +106,10 @@ function ProductListHome() {
 
   const handleBrandClick = (name: string) => {
     setSelectedBrand(name);
+  };
+
+  const handleSpecialTagsClick = (name: string) => {
+    setSelectedSpecialTag(name);
   };
 
   // const handleSort = (sortType: SortingTypes) => {
@@ -120,7 +142,7 @@ function ProductListHome() {
     setApiFilters({
       brand: selectedBrand,
       category: selectedCategory,
-      specialTag: "All Special Tags",
+      specialTag: selectedSpecialTag,
       searchString: "",
     });
   };
@@ -159,7 +181,7 @@ function ProductListHome() {
           </li>
           <li className="nav-item dropdown">
             <div
-              className="d-flex nav-link text-dark fs-6 border rounded"
+              className="d-flex nav-link text-dark fs-6 border rounded me-1"
               role="button"
               data-bs-toggle="dropdown"
               aria-expanded="false"
@@ -177,6 +199,30 @@ function ProductListHome() {
                   style={{ width: "17vh" }}
                 >
                   {brandName}
+                </li>
+              ))}
+            </ul>
+          </li>
+          <li className="nav-item dropdown">
+            <div
+              className="d-flex nav-link text-dark fs-6 border rounded me-1"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+              style={{ width: "17vh" }}
+            >
+              <span>{selectedSpecialTag}</span>
+              <i className="bi bi-caret-down ms-auto" />
+            </div>
+            <ul className="dropdown-menu">
+              {specialTagsList.map((tagName, index) => (
+                <li
+                  className="dropdown-item"
+                  key={index}
+                  onClick={() => handleSpecialTagsClick(tagName)}
+                  style={{ width: "17vh" }}
+                >
+                  {tagName}
                 </li>
               ))}
             </ul>

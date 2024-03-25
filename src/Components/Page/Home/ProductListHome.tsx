@@ -152,117 +152,139 @@ function ProductListHome() {
   }
 
   return (
-    <div className="container">
-      <div className="my-3">
-        <ul className="nav w-100 d-flex justify-content-center">
-          <li className="nav-item dropdown">
-            <div
-              className="d-flex nav-link text-dark fs-6 border rounded me-1"
-              role="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-              style={{ width: "21vh" }}
+    <div>
+      <div className="custom-banner row m-auto align-items-center">
+        <div className="col-12 mt-5">
+          <div className="input-group">
+            <input
+              type={"text"}
+              className="input-group-text ms-auto rounded-start-pill"
+              style={{
+                padding: "0.7rem 0.7rem",
+                width: "25rem",
+              }}
+              placeholder="Search for Details!"
+              // value={value}
+              // onChange={handleChange}
+            />
+            <button
+              className="btn btn-light me-auto rounded-end-pill"
+              type="button"
+              id="button-addon2"
+              onClick={handleFilters}
             >
-              <span>{selectedCategory}</span>
-              <i className="bi bi-caret-down ms-auto" />
-            </div>
-            <ul className="dropdown-menu">
-              {categoryList.map((categoryName, index) => (
-                <li
-                  className="dropdown-item"
-                  key={index}
-                  onClick={() => handleCategoryClick(categoryName)}
-                  style={{ width: "21vh" }}
-                >
-                  {categoryName}
-                </li>
-              ))}
-            </ul>
-          </li>
-          <li className="nav-item dropdown">
-            <div
-              className="d-flex nav-link text-dark fs-6 border rounded me-1"
-              role="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-              style={{ width: "18vh" }}
-            >
-              <span>{selectedBrand}</span>
-              <i className="bi bi-caret-down ms-auto" />
-            </div>
-            <ul className="dropdown-menu">
-              {brandsList.map((brandName, index) => (
-                <li
-                  className="dropdown-item"
-                  key={index}
-                  onClick={() => handleBrandClick(brandName)}
-                  style={{ width: "18vh" }}
-                >
-                  {brandName}
-                </li>
-              ))}
-            </ul>
-          </li>
-          <li className="nav-item dropdown">
-            <div
-              className="d-flex nav-link text-dark fs-6 border rounded me-1"
-              role="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-              style={{ width: "23vh" }}
-            >
-              <span>{selectedSpecialTag}</span>
-              <i className="bi bi-caret-down ms-auto" />
-            </div>
-            <ul className="dropdown-menu">
-              {specialTagsList.map((tagName, index) => (
-                <li
-                  className="dropdown-item"
-                  key={index}
-                  onClick={() => handleSpecialTagsClick(tagName)}
-                  style={{ width: "23vh" }}
-                >
-                  {tagName}
-                </li>
-              ))}
-            </ul>
-          </li>
-          <li>
-            <button className="btn btn-outline-primary" onClick={handleFilters}>
-              Filter
+              <i className="bi bi-search"></i>
             </button>
-          </li>
-          <li className="nav-item dropdown" style={{ marginLeft: "auto" }}>
-            <div
-              className="d-flex nav-link text-dark fs-6 border rounded"
-              role="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-              style={{ width: "20vh" }}
-            >
-              <span>{sortName}</span>
-              <i className="bi bi-caret-down ms-auto" />
-            </div>
-            <ul className="dropdown-menu">
-              {sortOptions.map((sortType, index) => (
-                <li
-                  key={index}
-                  className="dropdown-item"
-                  // onClick={() => handleSort(sortType)}
-                  style={{ width: "20vh" }}
-                >
-                  {sortType}
-                </li>
-              ))}
-            </ul>
-          </li>
-        </ul>
+          </div>
+        </div>
       </div>
-      <div className="row" style={{ justifyContent: "center" }}>
-        {products.length > 0 &&
-          products.map((product: Product, index: number) => (
-            <ProductCard product={product} key={index} />
-          ))}
+      <div className="container">
+        <div className="my-3">
+          <ul className="nav w-100 d-flex justify-content-center">
+            <li className="nav-item dropdown">
+              <div
+                className="d-flex nav-link text-dark fs-6 border rounded me-1"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+                style={{ width: "21vh" }}
+              >
+                <span>{selectedCategory}</span>
+                <i className="bi bi-caret-down ms-auto" />
+              </div>
+              <ul className="dropdown-menu">
+                {categoryList.map((categoryName, index) => (
+                  <li
+                    className="dropdown-item"
+                    key={index}
+                    onClick={() => handleCategoryClick(categoryName)}
+                    style={{ width: "21vh" }}
+                  >
+                    {categoryName}
+                  </li>
+                ))}
+              </ul>
+            </li>
+            <li className="nav-item dropdown">
+              <div
+                className="d-flex nav-link text-dark fs-6 border rounded me-1"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+                style={{ width: "18vh" }}
+              >
+                <span>{selectedBrand}</span>
+                <i className="bi bi-caret-down ms-auto" />
+              </div>
+              <ul className="dropdown-menu">
+                {brandsList.map((brandName, index) => (
+                  <li
+                    className="dropdown-item"
+                    key={index}
+                    onClick={() => handleBrandClick(brandName)}
+                    style={{ width: "18vh" }}
+                  >
+                    {brandName}
+                  </li>
+                ))}
+              </ul>
+            </li>
+            <li className="nav-item dropdown">
+              <div
+                className="d-flex nav-link text-dark fs-6 border rounded me-1"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+                style={{ width: "23vh" }}
+              >
+                <span>{selectedSpecialTag}</span>
+                <i className="bi bi-caret-down ms-auto" />
+              </div>
+              <ul className="dropdown-menu">
+                {specialTagsList.map((tagName, index) => (
+                  <li
+                    className="dropdown-item"
+                    key={index}
+                    onClick={() => handleSpecialTagsClick(tagName)}
+                    style={{ width: "23vh" }}
+                  >
+                    {tagName}
+                  </li>
+                ))}
+              </ul>
+            </li>
+            <li className="nav-item dropdown" style={{ marginLeft: "auto" }}>
+              <div
+                className="d-flex nav-link text-dark fs-6 border rounded"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+                style={{ width: "20vh" }}
+              >
+                <span>{sortName}</span>
+                <i className="bi bi-caret-down ms-auto" />
+              </div>
+              <ul className="dropdown-menu">
+                {sortOptions.map((sortType, index) => (
+                  <li
+                    key={index}
+                    className="dropdown-item"
+                    // onClick={() => handleSort(sortType)}
+                    style={{ width: "20vh" }}
+                  >
+                    {sortType}
+                  </li>
+                ))}
+              </ul>
+            </li>
+          </ul>
+        </div>
+        <div className="row" style={{ justifyContent: "center" }}>
+          {products.length > 0 &&
+            products.map((product: Product, index: number) => (
+              <ProductCard product={product} key={index} />
+            ))}
+        </div>
       </div>
     </div>
   );

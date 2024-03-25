@@ -30,6 +30,7 @@ function ProductListHome() {
   const [selectedSpecialTag, setSelectedSpecialTag] =
     useState("All Special Tags");
   const [searchValue, setSearchValue] = useState("");
+  const [sortType, setSortType] = useState(SortingTypes.NAME_A_Z);
 
   const [apiFilters, setApiFilters] = useState({
     brand: selectedBrand,
@@ -56,8 +57,6 @@ function ProductListHome() {
   const [categoryList, setCategoryList] = useState([""]);
   const [brandsList, setBrandsList] = useState([""]);
   const [specialTagsList, setSpecialTagsList] = useState([""]);
-
-  const [sortName, setSortName] = useState(SortingTypes.NAME_A_Z);
 
   useEffect(() => {
     if (!categoriesLoading) {
@@ -113,31 +112,39 @@ function ProductListHome() {
     setSelectedSpecialTag(name);
   };
 
-  // const handleSort = (sortType: SortingTypes) => {
-  //   if (sortType === SortingTypes.PRICE_LOW_HIGH) {
-  //     products.sort((a: Product, b: Product) => a.price - b.price);
-  //   }
+  const handleSortName = (type: SortingTypes) => {
+    setSortType(type);
+  };
 
-  //   if (sortType === SortingTypes.PRICE_HIGH_LOW) {
-  //     products.sort((a: Product, b: Product) => b.price - a.price);
-  //   }
+  const handleSort = (sortType: SortingTypes) => {
+    let arrayForSort = [...products];
 
-  //   if (sortType === SortingTypes.NAME_A_Z) {
-  //     products.sort(
-  //       (a: Product, b: Product) =>
-  //         a.name.toUpperCase().charCodeAt(0) -
-  //         b.name.toUpperCase().charCodeAt(0)
-  //     );
-  //   }
+    if (sortType === SortingTypes.PRICE_LOW_HIGH) {
+      arrayForSort.sort((a: Product, b: Product) => a.price - b.price);
+    }
 
-  //   if (sortType === SortingTypes.NAME_Z_A) {
-  //     products.sort(
-  //       (a: Product, b: Product) =>
-  //         b.name.toUpperCase().charCodeAt(0) -
-  //         a.name.toUpperCase().charCodeAt(0)
-  //     );
-  //   }
-  // };
+    if (sortType === SortingTypes.PRICE_HIGH_LOW) {
+      arrayForSort.sort((a: Product, b: Product) => b.price - a.price);
+    }
+
+    if (sortType === SortingTypes.NAME_A_Z) {
+      arrayForSort.sort(
+        (a: Product, b: Product) =>
+          a.name.toUpperCase().charCodeAt(0) -
+          b.name.toUpperCase().charCodeAt(0)
+      );
+    }
+
+    if (sortType === SortingTypes.NAME_Z_A) {
+      arrayForSort.sort(
+        (a: Product, b: Product) =>
+          b.name.toUpperCase().charCodeAt(0) -
+          a.name.toUpperCase().charCodeAt(0)
+      );
+    }
+
+    setProducts(arrayForSort);
+  };
 
   const handleFilters = () => {
     setApiFilters({
@@ -146,6 +153,7 @@ function ProductListHome() {
       specialTag: selectedSpecialTag,
       searchString: searchValue,
     });
+    handleSort(sortType);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -244,13 +252,13 @@ function ProductListHome() {
                 </ul>
               </li>
               <li className="nav-item dropdown">
-                <FiltersButton buttonText={sortName}></FiltersButton>
+                <FiltersButton buttonText={sortType}></FiltersButton>
                 <ul className="dropdown-menu">
                   {sortOptions.map((sortType, index) => (
                     <li
                       key={index}
                       className="dropdown-item"
-                      // onClick={() => handleSort(sortType)}
+                      onClick={() => handleSortName(sortType)}
                       style={{ width: "fit-content" }}
                     >
                       {sortType}

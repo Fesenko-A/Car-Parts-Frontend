@@ -21,7 +21,7 @@ function ProductListHome() {
   const [totalRecords, setTotalRecords] = useState(0);
   const [pageOptions, setPageOptions] = useState({
     pageNumber: 1,
-    pageSize: 5,
+    pageSize: 6,
   });
   const [currentPageSize, setCurrentPageSize] = useState(pageOptions.pageSize);
 
@@ -152,7 +152,7 @@ function ProductListHome() {
   }
 
   return (
-    <div className="row container">
+    <div className="container">
       <div className="my-3">
         <ul className="nav w-100 d-flex justify-content-center">
           <li className="nav-item dropdown">
@@ -185,7 +185,7 @@ function ProductListHome() {
               role="button"
               data-bs-toggle="dropdown"
               aria-expanded="false"
-              style={{ width: "17vh" }}
+              style={{ width: "18vh" }}
             >
               <span>{selectedBrand}</span>
               <i className="bi bi-caret-down ms-auto" />
@@ -196,7 +196,7 @@ function ProductListHome() {
                   className="dropdown-item"
                   key={index}
                   onClick={() => handleBrandClick(brandName)}
-                  style={{ width: "17vh" }}
+                  style={{ width: "18vh" }}
                 >
                   {brandName}
                 </li>
@@ -209,7 +209,7 @@ function ProductListHome() {
               role="button"
               data-bs-toggle="dropdown"
               aria-expanded="false"
-              style={{ width: "17vh" }}
+              style={{ width: "23vh" }}
             >
               <span>{selectedSpecialTag}</span>
               <i className="bi bi-caret-down ms-auto" />
@@ -220,7 +220,7 @@ function ProductListHome() {
                   className="dropdown-item"
                   key={index}
                   onClick={() => handleSpecialTagsClick(tagName)}
-                  style={{ width: "17vh" }}
+                  style={{ width: "23vh" }}
                 >
                   {tagName}
                 </li>
@@ -258,10 +258,12 @@ function ProductListHome() {
           </li>
         </ul>
       </div>
-      {products.length > 0 &&
-        products.map((product: Product, index: number) => (
-          <ProductCard product={product} key={index} />
-        ))}
+      <div className="row" style={{ justifyContent: "center" }}>
+        {products.length > 0 &&
+          products.map((product: Product, index: number) => (
+            <ProductCard product={product} key={index} />
+          ))}
+      </div>
     </div>
   );
 }

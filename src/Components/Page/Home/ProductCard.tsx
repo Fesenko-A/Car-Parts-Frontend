@@ -46,8 +46,11 @@ function ProductCard(props: Props) {
   return (
     <>
       <div
-        className="card container m-2"
-        style={{ width: "19rem", height: "29.5rem", borderColor: "#e6e6e6" }}
+        className="card container m-2 row col-sm-7 col-md-5 col-lg-4 col-xl-3 col-xxl-3"
+        style={{
+          height: "29.5rem",
+          borderColor: "#e6e6e6",
+        }}
       >
         <div className="card-body row">
           <div className="text-center pt-3" style={{ height: "16rem" }}>

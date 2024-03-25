@@ -29,12 +29,13 @@ function ProductListHome() {
   const [selectedBrand, setSelectedBrand] = useState("All Brands");
   const [selectedSpecialTag, setSelectedSpecialTag] =
     useState("All Special Tags");
+  const [searchValue, setSearchValue] = useState("");
 
   const [apiFilters, setApiFilters] = useState({
     brand: selectedBrand,
     category: selectedCategory,
     specialTag: selectedSpecialTag,
-    searchString: "",
+    searchString: searchValue,
   });
 
   const { data, isLoading } = useGetAllProductsQuery({
@@ -143,8 +144,12 @@ function ProductListHome() {
       brand: selectedBrand,
       category: selectedCategory,
       specialTag: selectedSpecialTag,
-      searchString: "",
+      searchString: searchValue,
     });
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(e.target.value);
   };
 
   const handleShowFilters = () => {
@@ -170,6 +175,8 @@ function ProductListHome() {
                 padding: "0.7rem 0.7rem",
                 width: "25rem",
               }}
+              value={searchValue}
+              onChange={handleChange}
               placeholder="Search for Details!"
             />
             <button

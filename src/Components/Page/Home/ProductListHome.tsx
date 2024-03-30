@@ -14,8 +14,6 @@ function ProductListHome() {
   const sortOptions: Array<SortingTypes> = [
     SortingTypes.PRICE_LOW_HIGH,
     SortingTypes.PRICE_HIGH_LOW,
-    SortingTypes.NAME_A_Z,
-    SortingTypes.NAME_Z_A,
   ];
 
   const [totalRecords, setTotalRecords] = useState(0);
@@ -30,13 +28,16 @@ function ProductListHome() {
   const [selectedSpecialTag, setSelectedSpecialTag] =
     useState("All Special Tags");
   const [searchValue, setSearchValue] = useState("");
-  const [sortType, setSortType] = useState(SortingTypes.NAME_A_Z);
+  const [sortType, setSortType] = useState(SortingTypes.PRICE_LOW_HIGH);
+  const [outOfStockValue, setOutOfStock] = useState("true");
 
   const [apiFilters, setApiFilters] = useState({
     brand: selectedBrand,
     category: selectedCategory,
     specialTag: selectedSpecialTag,
     searchString: searchValue,
+    sortingOptions: sortType,
+    outOfStock: outOfStockValue,
   });
 
   const { data, isLoading } = useGetAllProductsQuery({
@@ -46,6 +47,8 @@ function ProductListHome() {
     searchString: apiFilters.searchString,
     pageNumber: pageOptions.pageNumber,
     pageSize: pageOptions.pageSize,
+    sortingOptions: apiFilters.sortingOptions,
+    outOfStock: apiFilters.outOfStock,
   });
   const { data: categoriesData, isLoading: categoriesLoading } =
     useGetAllCategoriesQuery(null);
@@ -112,38 +115,12 @@ function ProductListHome() {
     setSelectedSpecialTag(name);
   };
 
-  const handleSortName = (type: SortingTypes) => {
+  const handleSortNameClick = (type: SortingTypes) => {
     setSortType(type);
   };
 
-  const handleSort = (sortType: SortingTypes) => {
-    let arrayForSort = [...products];
-
-    if (sortType === SortingTypes.PRICE_LOW_HIGH) {
-      arrayForSort.sort((a: Product, b: Product) => a.price - b.price);
-    }
-
-    if (sortType === SortingTypes.PRICE_HIGH_LOW) {
-      arrayForSort.sort((a: Product, b: Product) => b.price - a.price);
-    }
-
-    if (sortType === SortingTypes.NAME_A_Z) {
-      arrayForSort.sort(
-        (a: Product, b: Product) =>
-          a.name.toUpperCase().charCodeAt(0) -
-          b.name.toUpperCase().charCodeAt(0)
-      );
-    }
-
-    if (sortType === SortingTypes.NAME_Z_A) {
-      arrayForSort.sort(
-        (a: Product, b: Product) =>
-          b.name.toUpperCase().charCodeAt(0) -
-          a.name.toUpperCase().charCodeAt(0)
-      );
-    }
-
-    setProducts(arrayForSort);
+  const handleOutOfStockClick = (val: string) => {
+    setOutOfStock(val);
   };
 
   const handleFilters = () => {
@@ -152,8 +129,9 @@ function ProductListHome() {
       category: selectedCategory,
       specialTag: selectedSpecialTag,
       searchString: searchValue,
+      sortingOptions: sortType,
+      outOfStock: outOfStockValue,
     });
-    handleSort(sortType);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -214,7 +192,6 @@ function ProductListHome() {
                       className="dropdown-item"
                       key={index}
                       onClick={() => handleCategoryClick(categoryName)}
-                      style={{ width: "fit-content" }}
                     >
                       {categoryName}
                     </li>
@@ -229,7 +206,6 @@ function ProductListHome() {
                       className="dropdown-item"
                       key={index}
                       onClick={() => handleBrandClick(brandName)}
-                      style={{ width: "fit-content" }}
                     >
                       {brandName}
                     </li>
@@ -244,7 +220,6 @@ function ProductListHome() {
                       className="dropdown-item"
                       key={index}
                       onClick={() => handleSpecialTagsClick(tagName)}
-                      style={{ width: "fit-content" }}
                     >
                       {tagName}
                     </li>
@@ -258,12 +233,32 @@ function ProductListHome() {
                     <li
                       key={index}
                       className="dropdown-item"
-                      onClick={() => handleSortName(sortType)}
-                      style={{ width: "fit-content" }}
+                      onClick={() => handleSortNameClick(sortType)}
                     >
                       {sortType}
                     </li>
                   ))}
+                </ul>
+              </li>
+              <li className="nav-item dropdown">
+                <FiltersButton
+                  buttonText={`Include Out of Stock: ${
+                    outOfStockValue === "true" ? "Yes" : "No"
+                  }`}
+                ></FiltersButton>
+                <ul className="dropdown-menu">
+                  <li
+                    className="dropdown-item"
+                    onClick={() => handleOutOfStockClick("true")}
+                  >
+                    Include
+                  </li>
+                  <li
+                    className="dropdown-item"
+                    onClick={() => handleOutOfStockClick("false")}
+                  >
+                    Not Include
+                  </li>
                 </ul>
               </li>
             </ul>

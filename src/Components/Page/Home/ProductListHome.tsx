@@ -7,6 +7,7 @@ import { SortingTypes } from "../../../Static";
 import { useGetAllCategoriesQuery } from "../../../APIs/categoriesApi";
 import { useGetAllBrandsQuery } from "../../../APIs/brandApi";
 import { useGetAllSpecialTagsQuery } from "../../../APIs/specialTagsApi";
+import { getPageDetails } from "../../../Helper";
 
 function ProductListHome() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -21,7 +22,6 @@ function ProductListHome() {
     pageNumber: 1,
     pageSize: 6,
   });
-  const [currentPageSize, setCurrentPageSize] = useState(pageOptions.pageSize);
   const [showFilters, setShowFilters] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("All Categories");
   const [selectedBrand, setSelectedBrand] = useState("All Brands");
@@ -140,6 +140,16 @@ function ProductListHome() {
 
   const handleShowFilters = () => {
     showFilters === false ? setShowFilters(true) : setShowFilters(false);
+  };
+
+  const handlePageOptionChange = (direction: string, pageSize?: number) => {
+    if (direction === "prev") {
+      setPageOptions({ pageSize: 6, pageNumber: pageOptions.pageNumber - 1 });
+    } else if (direction === "next") {
+      setPageOptions({ pageSize: 6, pageNumber: pageOptions.pageNumber + 1 });
+    } else if (direction === "change") {
+      setPageOptions({ pageSize: pageSize ? pageSize : 6, pageNumber: 1 });
+    }
   };
 
   if (isLoading) {
@@ -271,6 +281,44 @@ function ProductListHome() {
             products.map((product: Product, index: number) => (
               <ProductCard product={product} key={index} />
             ))}
+        </div>
+        <div className="mt-3">
+          <nav aria-label="Page navigation example">
+            <ul className="pagination justify-content-center">
+              <li className="page-item">
+                <a
+                  className={`page-link ${
+                    pageOptions.pageNumber === 1 ? "disabled" : ""
+                  }`}
+                  onClick={() => handlePageOptionChange("prev")}
+                  href="#"
+                >
+                  <i className="bi bi-chevron-left"></i>
+                </a>
+              </li>
+              <li className="page-item">
+                <a
+                  className={`page-link ${
+                    pageOptions.pageNumber * pageOptions.pageSize >=
+                    totalRecords
+                      ? "disabled"
+                      : ""
+                  }`}
+                  onClick={() => handlePageOptionChange("next")}
+                  href="#"
+                >
+                  <i className="bi bi-chevron-right"></i>
+                </a>
+              </li>
+            </ul>
+            <div className="mx-auto text-center">
+              {getPageDetails(
+                pageOptions.pageNumber,
+                pageOptions.pageSize,
+                totalRecords
+              )}
+            </div>
+          </nav>
         </div>
       </div>
     </div>

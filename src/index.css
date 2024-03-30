@@ -16,16 +16,22 @@ code {
   --max-lines: 1;
   --line-height: 1.8;
   list-style: var(--line-height);
-  overflow: hidden;
   max-height: calc(var(--max-lines) * 1em * var(--line-height));
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: var(--max-lines);
+  -webkit-box-orient: vertical;
 }
 
 .my-card-text {
   --max-lines: 3;
   --line-height: 1.5;
   list-style: var(--line-height);
-  overflow: hidden;
   max-height: calc(var(--max-lines) * 1em * var(--line-height));
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: var(--max-lines);
+  -webkit-box-orient: vertical;
 }
 
 .custom-banner {

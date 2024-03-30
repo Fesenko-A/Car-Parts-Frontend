@@ -52,7 +52,7 @@ function ProductCard(props: Props) {
           borderColor: "#e6e6e6",
         }}
       >
-        <div className="card-body row">
+        <div className="card-body row mx-auto">
           <div className="text-center pt-3" style={{ height: "16rem" }}>
             <Link to={`productDetails/${props.product.id}`}>
               <img

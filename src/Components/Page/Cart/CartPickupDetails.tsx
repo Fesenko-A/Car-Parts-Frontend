@@ -5,14 +5,12 @@ import { RootState } from "../../../Storage/store";
 import { inputHelper } from "../../../Helper";
 import { MiniLoader } from "../Common";
 import { useNavigate } from "react-router-dom";
-import { OrderStatuses, PaymentMethods } from "../../../Static";
+import { OrderStatuses } from "../../../Static";
 import { useCreateOrderMutation } from "../../../APIs/orderApi";
-import { useCreateIntentMutation } from "../../../APIs/onlinePaymentsApi";
 
 function CartPickupDetails() {
   const navigate = useNavigate();
   const [createOrder] = useCreateOrderMutation();
-  const [createIntent] = useCreateIntentMutation();
   const [loading, setLoading] = useState(false);
   const userData: User = useSelector((state: RootState) => state.userAuthStore);
   const shoppingCartFromStore: CartItem[] = useSelector(
@@ -22,7 +20,6 @@ function CartPickupDetails() {
     name: userData.fullName,
     email: userData.email,
     phoneNumber: "",
-    paymentMethodId: 1,
   };
   const [userInput, setUserInput] = useState(initialData);
 
@@ -55,33 +52,18 @@ function CartPickupDetails() {
     status: OrderStatuses.CONFIRMED,
     totalItems: totalItems,
     orderDetails: orderDetailsDTO,
-    paymentMethodId: Number(userInput.paymentMethodId),
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
 
-    if (data.paymentMethodId === 1) {
-      const response: ApiResponse = await createOrder(data);
+    const response: ApiResponse = await createOrder(data);
 
-      if (response) {
-        navigate(`/order/orderConfirmed/${response.data!.result.orderId}`);
-      } else {
-        navigate("/failed");
-      }
+    if (response) {
+      navigate(`/order/orderConfirmed/${response.data!.result.orderId}`);
     } else {
-      const response: ApiResponse = await createIntent(userData.id);
-
-      if (response) {
-        navigate("/payment", {
-          state: {
-            apiResult: data,
-            userInput: userInput,
-            clientSecret: response.data!.result.clientSecret,
-          },
-        });
-      }
+      navigate("/failed");
     }
   };
 
@@ -90,7 +72,6 @@ function CartPickupDetails() {
       name: userData.fullName,
       email: userData.email,
       phoneNumber: "",
-      paymentMethodId: userInput.paymentMethodId,
     });
   }, [userData]);
 
@@ -139,21 +120,8 @@ function CartPickupDetails() {
         </div>
 
         <div className="form-group mt-3">
-          Payment Method
-          <select
-            className="form-control"
-            name="paymentMethodId"
-            value={userInput.paymentMethodId}
-            onChange={handleUserInput}
-          >
-            <option value={1}>{PaymentMethods.CASH}</option>
-            <option value={2}>{PaymentMethods.ONLINE}</option>
-          </select>
-        </div>
-
-        <div className="form-group mt-3">
           <div className="card p-3" style={{ background: "ghostwhite" }}>
-            <h5>Total: ${total}</h5>
+            <h5>Total: ${total.toFixed(2)}</h5>
             <h5>Number of Items: {totalItems}</h5>
           </div>
         </div>

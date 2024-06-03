@@ -22,6 +22,7 @@ const productApi = createApi({
         pageSize,
         sortingOptions,
         outOfStock,
+        onlyWithDiscount,
       }) => ({
         url: "products/getall",
         params: {
@@ -33,6 +34,7 @@ const productApi = createApi({
           ...(pageSize && { pageSize }),
           ...(sortingOptions && { sortingOptions }),
           ...(outOfStock && { outOfStock }),
+          ...(onlyWithDiscount && { onlyWithDiscount }),
         },
       }),
       transformResponse(apiResponse: { result: any }, meta: any) {

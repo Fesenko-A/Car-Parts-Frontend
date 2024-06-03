@@ -30,6 +30,7 @@ function ProductListHome() {
   const [searchValue, setSearchValue] = useState("");
   const [sortType, setSortType] = useState(SortingTypes.PRICE_LOW_HIGH);
   const [outOfStockValue, setOutOfStock] = useState("true");
+  const [onlyWithDiscountValue, setOnlyWithDiscount] = useState("false");
 
   const [apiFilters, setApiFilters] = useState({
     brand: selectedBrand,
@@ -38,6 +39,7 @@ function ProductListHome() {
     searchString: searchValue,
     sortingOptions: sortType,
     outOfStock: outOfStockValue,
+    onlyWithDiscount: onlyWithDiscountValue,
   });
 
   const { data, isLoading } = useGetAllProductsQuery({
@@ -49,6 +51,7 @@ function ProductListHome() {
     pageSize: pageOptions.pageSize,
     sortingOptions: apiFilters.sortingOptions,
     outOfStock: apiFilters.outOfStock,
+    onlyWithDiscount: apiFilters.onlyWithDiscount,
   });
   const { data: categoriesData, isLoading: categoriesLoading } =
     useGetAllCategoriesQuery(null);
@@ -123,6 +126,10 @@ function ProductListHome() {
     setOutOfStock(val);
   };
 
+  const handleOnlyWithDiscountClick = (val: string) => {
+    setOnlyWithDiscount(val);
+  };
+
   const handleFilters = () => {
     setApiFilters({
       brand: selectedBrand,
@@ -131,6 +138,7 @@ function ProductListHome() {
       searchString: searchValue,
       sortingOptions: sortType,
       outOfStock: outOfStockValue,
+      onlyWithDiscount: onlyWithDiscountValue,
     });
   };
 
@@ -268,6 +276,27 @@ function ProductListHome() {
                     onClick={() => handleOutOfStockClick("false")}
                   >
                     Not Include
+                  </li>
+                </ul>
+              </li>
+              <li className="nav-item dropdown">
+                <FiltersButton
+                  buttonText={`Show Only with Discount: ${
+                    onlyWithDiscountValue === "true" ? "Yes" : "No"
+                  }`}
+                ></FiltersButton>
+                <ul className="dropdown-menu">
+                  <li
+                    className="dropdown-item"
+                    onClick={() => handleOnlyWithDiscountClick("true")}
+                  >
+                    Yes
+                  </li>
+                  <li
+                    className="dropdown-item"
+                    onClick={() => handleOnlyWithDiscountClick("false")}
+                  >
+                    No
                   </li>
                 </ul>
               </li>

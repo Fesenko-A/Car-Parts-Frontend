@@ -15,4 +15,6 @@ export default interface Product {
   category: Category;
   price: number;
   imageUrl: string;
+  discountPercentage: number;
+  finalPrice: number;
 }

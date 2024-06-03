@@ -81,7 +81,19 @@ function ProductDetails() {
             <p style={{ fontSize: "20px" }} className="pt-2">
               {data.result?.description}
             </p>
-            <span className="h3">${data.result?.price}</span> &nbsp;&nbsp;&nbsp;
+            {data.result?.finalPrice < data.result?.price ? (
+              <>
+                <span className="h3 text-decoration-line-through pe-2">
+                  ${data.result?.price}
+                </span>
+                <span className="h3 pe-3 text-danger">
+                  ${data.result?.finalPrice}
+                </span>
+              </>
+            ) : (
+              <span className="h3 pe-3">${data.result?.finalPrice}</span>
+            )}
+
             {data.result?.inStock ? (
               <>
                 <span

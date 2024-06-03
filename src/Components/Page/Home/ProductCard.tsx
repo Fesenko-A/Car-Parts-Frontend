@@ -85,13 +85,27 @@ function ProductCard(props: Props) {
             className="card-text my-card-text"
             style={{
               height: "10rem",
-              marginBottom: "0.5rem",
+              marginBottom: "0.4rem",
               marginTop: "1rem",
             }}
           >
             {props.product.description}
           </p>
-          <h4 className="card-text mb-0 text-center">${props.product.price}</h4>
+
+          {props.product.finalPrice < props.product.price ? (
+            <>
+              <h6 className="card-text mb-0 text-decoration-line-through text-center">
+                ${props.product.price.toFixed(2)}
+              </h6>
+              <h4 className="card-text mb-0 text-center text-danger">
+                ${props.product.finalPrice.toFixed(2)}
+              </h4>
+            </>
+          ) : (
+            <h4 className="card-text mb-0 text-center">
+              ${props.product.finalPrice.toFixed(2)}
+            </h4>
+          )}
           {isAddingToCart ? (
             <a className="btn btn-primary mt-auto" style={{ height: "2.4rem" }}>
               <MiniLoader type="light" size={70} />

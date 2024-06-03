@@ -15,8 +15,10 @@ function CartSummary() {
   const shoppingCartFromStore: CartItem[] = useSelector(
     (state: RootState) => state.shoppingCartStore.cartItems ?? []
   );
-  if (!shoppingCartFromStore) {
-    return <div>Shopping Cart is empty</div>;
+  if (!shoppingCartFromStore || shoppingCartFromStore.length === 0) {
+    return (
+      <h5 className="text-center fw-normal">Your Shopping Cart is empty</h5>
+    );
   }
 
   const handleQuantity = (updateQuantityBy: number, cartItem: CartItem) => {
@@ -65,15 +67,33 @@ function CartSummary() {
 
           <div className="p-2 mx-3" style={{ width: "100%" }}>
             <div className="d-flex justify-content-between align-items-center">
-              <h4 style={{ fontWeight: 300 }}>{cartItem.product?.name}</h4>
+              <h4 className="fw-normal" style={{ fontWeight: 300 }}>
+                {cartItem.product?.name}
+              </h4>
               <h4>
-                ${(cartItem.quantity! * cartItem.product!.price).toFixed(2)}
+                $
+                {(cartItem.quantity! * cartItem.product!.finalPrice).toFixed(2)}
               </h4>
             </div>
 
-            <div className="flex-fill">
-              <h4 className="text-primary">${cartItem.product!.price}</h4>
-            </div>
+            {cartItem.product!.finalPrice < cartItem.product!.price ? (
+              <div className="flex-fill">
+                <h4>
+                  <span className="text-primary text-decoration-line-through pe-2">
+                    ${cartItem.product!.price.toFixed(2)}
+                  </span>
+                  <span className="text-danger">
+                    ${cartItem.product!.finalPrice.toFixed(2)}
+                  </span>
+                </h4>
+              </div>
+            ) : (
+              <div className="flex-fill">
+                <h4 className="text-primary">
+                  ${cartItem.product!.finalPrice.toFixed(2)}
+                </h4>
+              </div>
+            )}
 
             <div
               className="d-flex justify-content-between p-2 mt-2 rounded-pill custom-card-shadow"

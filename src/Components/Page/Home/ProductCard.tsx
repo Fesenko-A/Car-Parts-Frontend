@@ -81,6 +81,21 @@ function ProductCard(props: Props) {
                 {props.product.specialTag.name}
               </i>
             )}
+          {props.product.discountPercentage > 0 && (
+            <span
+              className="btn btn-danger"
+              style={{
+                position: "absolute",
+                width: "21%",
+                borderRadius: "30px",
+                padding: "4px",
+                fontStyle: "normal",
+                marginLeft: "65%",
+              }}
+            >
+              -{props.product.discountPercentage}%
+            </span>
+          )}
           <p
             className="card-text my-card-text"
             style={{

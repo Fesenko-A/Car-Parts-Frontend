@@ -84,10 +84,13 @@ function ProductDetails() {
             {data.result?.finalPrice < data.result?.price ? (
               <>
                 <span className="h3 text-decoration-line-through pe-2">
-                  ${data.result?.price}
+                  ${data.result?.price.toFixed(2)}
                 </span>
-                <span className="h3 pe-3 text-danger">
-                  ${data.result?.finalPrice}
+                <span className="h3 pe-2 text-danger">
+                  ${data.result?.finalPrice.toFixed(2)}
+                </span>
+                <span className="me-3 badge text-bg-danger fs-5">
+                  -{data.result?.discountPercentage}%
                 </span>
               </>
             ) : (

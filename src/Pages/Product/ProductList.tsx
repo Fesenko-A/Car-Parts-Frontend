@@ -177,7 +177,7 @@ function ProductList() {
           error: "Error",
         },
         {
-          theme: "dark",
+          theme: "light",
         }
       );
     } else {
@@ -359,7 +359,13 @@ function ProductList() {
                     <div className="col-1">{product.category.name}</div>
                     <div className="col-2">{product.brand.name}</div>
                     <div className="col-1">
-                      ${product.finalPrice.toFixed(2)}
+                      {product.finalPrice < product.price ? (
+                        <span className="text-danger">
+                          ${product.finalPrice.toFixed(2)}
+                        </span>
+                      ) : (
+                        <span>${product.finalPrice.toFixed(2)}</span>
+                      )}
                     </div>
                     <div className="col-2">{product.specialTag.name}</div>
                     <div className="col-1">

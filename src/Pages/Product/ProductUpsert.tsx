@@ -21,6 +21,7 @@ const productData = {
   categoryId: "1",
   price: "",
   imageUrl: "",
+  discountPercentage: "",
 };
 
 function ProductUpsert() {
@@ -51,6 +52,7 @@ function ProductUpsert() {
         categoryId: productsData.result.categoryId,
         price: productsData.result.price,
         imageUrl: productsData.result.imageUrl,
+        discountPercentage: productsData.result.discountPercentage,
       };
       setProductInputs(tempData);
     }
@@ -94,12 +96,12 @@ function ProductUpsert() {
     formData.append("CategoryId", productInputs.categoryId);
     formData.append("Price", productInputs.price.toString().replace(".", ","));
     formData.append("ImageUrl", productInputs.imageUrl);
+    formData.append("DiscountPercentage", productInputs.discountPercentage);
 
     let response;
     if (id) {
       formData.append("Id", id);
       response = await updateProduct({ data: formData, id });
-      console.log(response);
       toastNotify("Product updated successfully!", "success");
     } else {
       response = await createProduct(formData);
@@ -156,6 +158,7 @@ function ProductUpsert() {
                     className="form-control mt-3"
                     placeholder="Enter Description"
                     name="description"
+                    required
                     rows={10}
                     value={productInputs.description}
                     onChange={handleProductInput}
@@ -203,6 +206,23 @@ function ProductUpsert() {
                     name="price"
                     value={productInputs.price}
                     onChange={handleProductInput}
+                  />
+
+                  <input
+                    type="number"
+                    min="0"
+                    max="100"
+                    className="form-control mt-3"
+                    placeholder="Enter Discount percentage"
+                    required
+                    name="discountPercentage"
+                    value={productInputs.discountPercentage}
+                    onChange={handleProductInput}
+                    onKeyPress={(e) => {
+                      if (!/^\d+$/.test(e.key)) {
+                        e.preventDefault();
+                      }
+                    }}
                   />
 
                   <input
